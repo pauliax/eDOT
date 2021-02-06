@@ -25,10 +25,11 @@ export function Transfer({ transferTokens, tokenSymbol }: Props) {
           }
         }}
       >
-        <div className="form-group">
-          <label>Amount of {tokenSymbol}</label>
+        <div className="form-group nes-field">
+          <label htmlFor="amount_field">Amount of {tokenSymbol}</label>
           <input
-            className="form-control"
+            id="amount_field"
+            className="nes-input"
             type="number"
             step="1"
             name="amount"
@@ -36,12 +37,23 @@ export function Transfer({ transferTokens, tokenSymbol }: Props) {
             required
           />
         </div>
-        <div className="form-group">
-          <label>Recipient address</label>
-          <input className="form-control" type="text" name="to" required />
+        <div className="form-group nes-field">
+          <label htmlFor="recipient_field">Recipient address</label>
+          <input
+            id="recipient_field"
+            className="nes-input"
+            type="text"
+            name="to"
+            placeholder="0x12345..."
+            required
+          />
         </div>
         <div className="form-group">
-          <input className="btn btn-primary" type="submit" value="Transfer" />
+          <input
+            className="btn nes-btn is-primary"
+            type="submit"
+            value="Transfer"
+          />
         </div>
       </form>
     </div>
