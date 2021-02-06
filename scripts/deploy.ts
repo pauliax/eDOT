@@ -1,5 +1,6 @@
 import { ethers, network, artifacts } from "hardhat";
-import {Contract} from "ethers";
+import { Contract } from "ethers";
+import * as fs from "fs";
 
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
@@ -9,7 +10,7 @@ async function main() {
     console.warn(
       "You are trying to deploy a contract to the Hardhat Network, which" +
         "gets automatically created and destroyed every time. Use the Hardhat" +
-        " option '--network localhost'"
+        " option '--network localhost'",
     );
   }
 
@@ -17,7 +18,7 @@ async function main() {
   const [deployer] = await ethers.getSigners();
   console.log(
     "Deploying the contracts with the account:",
-    await deployer.getAddress()
+    await deployer.getAddress(),
   );
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
@@ -32,8 +33,7 @@ async function main() {
   saveFrontendFiles(token);
 }
 
-function saveFrontendFiles(token : Contract) {
-  const fs = require("fs");
+function saveFrontendFiles(token: Contract) {
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
   if (!fs.existsSync(contractsDir)) {
@@ -42,14 +42,14 @@ function saveFrontendFiles(token : Contract) {
 
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
-    JSON.stringify({ Token: token.address }, undefined, 2)
+    JSON.stringify({ Token: token.address }, undefined, 2),
   );
 
   const TokenArtifact = artifacts.readArtifactSync("Token");
 
   fs.writeFileSync(
     contractsDir + "/Token.json",
-    JSON.stringify(TokenArtifact, null, 2)
+    JSON.stringify(TokenArtifact, null, 2),
   );
 }
 

@@ -1,11 +1,11 @@
 import React from "react";
 
 type Props = {
-    transferTokens: (to: string, amount: string) => {},
-    tokenSymbol?: string
-}
+  transferTokens: (to: string, amount: string) => {};
+  tokenSymbol?: string;
+};
 
-export function Transfer({ transferTokens, tokenSymbol } : Props) {
+export function Transfer({ transferTokens, tokenSymbol }: Props) {
   return (
     <div>
       <h4>Transfer</h4>

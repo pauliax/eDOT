@@ -1,11 +1,11 @@
 import React from "react";
 
 type Props = {
-    message: string,
-    dismiss: () => void,
-}
+  message: string;
+  dismiss: () => void;
+};
 
-export function TransactionErrorMessage({ message, dismiss } : Props) {
+export function TransactionErrorMessage({ message, dismiss }: Props) {
   return (
     <div className="alert alert-danger" role="alert">
       Error sending transaction: {message.substring(0, 100)}

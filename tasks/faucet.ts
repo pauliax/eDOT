@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import {task} from "hardhat/config";
+import { task } from "hardhat/config";
 // import { network} from "hardhat";
 // import hre from "hardhat";
 
@@ -25,8 +25,8 @@ task("faucet", "Sends ETH and tokens to an address")
       return;
     }
 
-    const addressJson = fs.readFileSync(addressesFile);
-    const address = JSON.parse(addressJson.toString());
+    // const addressJson = fs.readFileSync(addressesFile);
+    // const address = JSON.parse(addressJson.toString());
 
     // if ((await hre.ethers.provider.getCode(address.Token)) === "0x") {
     //   console.error("You need to deploy your contract first");

@@ -1,11 +1,11 @@
 import React from "react";
 
 type Props = {
-    message: string,
-    dismiss: () => void,
-}
+  message: string;
+  dismiss: () => void;
+};
 
-export function NetworkErrorMessage({ message, dismiss } : Props) {
+export function NetworkErrorMessage({ message, dismiss }: Props) {
   return (
     <div className="alert alert-danger" role="alert">
       {message}
