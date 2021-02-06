@@ -1,6 +1,10 @@
 import React from "react";
 
-export function NoTokensMessage({ selectedAddress }) {
+type Props = {
+    selectedAddress: string,
+}
+
+export function NoTokensMessage({ selectedAddress } : Props) {
   return (
     <>
       <p>You don't have tokens to transfer</p>

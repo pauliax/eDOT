@@ -1,3 +1,6 @@
+import { ethers, network, artifacts } from "hardhat";
+import {Contract} from "ethers";
+
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
 async function main() {
@@ -29,7 +32,7 @@ async function main() {
   saveFrontendFiles(token);
 }
 
-function saveFrontendFiles(token) {
+function saveFrontendFiles(token : Contract) {
   const fs = require("fs");
   const contractsDir = __dirname + "/../frontend/src/contracts";
 

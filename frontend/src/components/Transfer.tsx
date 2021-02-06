@@ -1,6 +1,11 @@
 import React from "react";
 
-export function Transfer({ transferTokens, tokenSymbol }) {
+type Props = {
+    transferTokens: (to: string, amount: string) => {},
+    tokenSymbol?: string
+}
+
+export function Transfer({ transferTokens, tokenSymbol } : Props) {
   return (
     <div>
       <h4>Transfer</h4>
@@ -10,12 +15,13 @@ export function Transfer({ transferTokens, tokenSymbol }) {
           // form's data.
           event.preventDefault();
 
-          const formData = new FormData(event.target);
+          const target = event.target as HTMLFormElement; // try to avoid casting
+          const formData = new FormData(target);
           const to = formData.get("to");
           const amount = formData.get("amount");
 
           if (to && amount) {
-            transferTokens(to, amount);
+            transferTokens(to.toString(), amount.toString());
           }
         }}
       >

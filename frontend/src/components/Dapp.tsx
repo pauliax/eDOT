@@ -1,23 +1,20 @@
 import React from "react";
-
 // We'll use ethers to interact with the Ethereum network and our contract
-import { ethers } from "ethers";
-
+import {BigNumber, ethers} from "ethers";
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import TokenArtifact from "../contracts/Token.json";
 import contractAddress from "../contracts/contract-address.json";
-
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
 // logic. They just render HTML.
-import { NoWalletDetected } from "./NoWalletDetected";
-import { ConnectWallet } from "./ConnectWallet";
-import { Loading } from "./Loading";
-import { Transfer } from "./Transfer";
-import { TransactionErrorMessage } from "./TransactionErrorMessage";
-import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
-import { NoTokensMessage } from "./NoTokensMessage";
+import {NoWalletDetected} from "./NoWalletDetected";
+import {ConnectWallet} from "./ConnectWallet";
+import {Loading} from "./Loading";
+import {Transfer} from "./Transfer";
+import {TransactionErrorMessage} from "./TransactionErrorMessage";
+import {WaitingForTransactionMessage} from "./WaitingForTransactionMessage";
+import {NoTokensMessage} from "./NoTokensMessage";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
@@ -37,24 +34,59 @@ const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 // Note that (3) and (4) are specific of this sample application, but they show
 // you how to keep your Dapp and contract's state in sync,  and how to send a
 // transaction.
-export class Dapp extends React.Component {
-  constructor(props) {
+
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
+
+type TokenData = {
+  name? : string,
+  symbol? : string,
+}
+
+type ErrorType = {
+  data : {
+    message: string,
+  },
+  message: string,
+}
+
+type DappState = {
+  // The info of the token (i.e. It's Name and symbol)
+  tokenData?: TokenData,
+  // The user's address and balance
+  selectedAddress?: string,
+  balance?: BigNumber,
+  // The ID about transactions being sent, and any possible error with them
+  txBeingSent?: string,
+  transactionError?: ErrorType,
+  networkError?: string,
+}
+
+export class Dapp extends React.Component<{}, DappState> {
+
+  private _provider?: ethers.providers.Web3Provider;
+
+  private _token?: ethers.Contract;
+
+  private _pollDataInterval? : number;
+
+  private initialState : DappState = {
+    // The info of the token (i.e. It's Name and symbol)
+    tokenData: undefined,
+    // The user's address and balance
+    selectedAddress: undefined,
+    balance: undefined,
+    // The ID about transactions being sent, and any possible error with them
+    txBeingSent: undefined,
+    transactionError: undefined,
+    networkError: undefined,
+  };
+
+  constructor(props : any) {
     super(props);
-
-    // We store multiple things in Dapp's state.
-    // You don't need to follow this pattern, but it's an useful example.
-    this.initialState = {
-      // The info of the token (i.e. It's Name and symbol)
-      tokenData: undefined,
-      // The user's address and balance
-      selectedAddress: undefined,
-      balance: undefined,
-      // The ID about transactions being sent, and any possible error with them
-      txBeingSent: undefined,
-      transactionError: undefined,
-      networkError: undefined,
-    };
-
     this.state = this.initialState;
   }
 
@@ -185,7 +217,7 @@ export class Dapp extends React.Component {
     this._initialize(selectedAddress);
 
     // We reinitialize it whenever the user changes their account.
-    window.ethereum.on("accountsChanged", ([newAddress]) => {
+    window.ethereum.on("accountsChanged", ([newAddress] : Array<string>) => {
       this._stopPollingData();
       // `accountsChanged` event can be triggered with an undefined newAddress.
       // This happens when the user removes the Dapp from the "Connected
@@ -199,13 +231,13 @@ export class Dapp extends React.Component {
     });
     
     // We reset the dapp state if the network is changed
-    window.ethereum.on("networkChanged", ([networkId]) => {
+    window.ethereum.on("networkChanged", ([networkId] : Array<string>) => {
       this._stopPollingData();
       this._resetState();
     });
   }
 
-  _initialize(userAddress) {
+  _initialize(userAddress : string) {
     // This method initializes the dapp
 
     // We first store the user's address in the component's state
@@ -244,35 +276,41 @@ export class Dapp extends React.Component {
   // don't need to poll it. If that's the case, you can just fetch it when you
   // initialize the app, as we do with the token data.
   _startPollingData() {
-    this._pollDataInterval = setInterval(() => this._updateBalance(), 1000);
-
+    this._pollDataInterval = window.setInterval(() => this._updateBalance(), 1000);
     // We run it once immediately so we don't have to wait for it
     this._updateBalance();
   }
 
   _stopPollingData() {
-    clearInterval(this._pollDataInterval);
+    window.clearInterval(this._pollDataInterval);
     this._pollDataInterval = undefined;
   }
 
   // The next two methods just read from the contract and store the results
   // in the component state.
   async _getTokenData() {
-    const name = await this._token.name();
-    const symbol = await this._token.symbol();
-
-    this.setState({ tokenData: { name, symbol } });
+    if (this._token) {
+      const name = await this._token.name();
+      const symbol = await this._token.symbol();
+      this.setState({ tokenData: { name, symbol } });
+    } else {
+      this.setState({ tokenData: { name : undefined, symbol: undefined } });
+    }
   }
 
   async _updateBalance() {
-    const balance = await this._token.balanceOf(this.state.selectedAddress);
-    this.setState({ balance });
+    if (this._token) {
+      const balance = await this._token.balanceOf(this.state.selectedAddress);
+      this.setState({ balance });
+    } else {
+      this.setState({ balance: undefined });
+    }
   }
 
   // This method sends an ethereum transaction to transfer tokens.
   // While this action is specific to this application, it illustrates how to
   // send a transaction.
-  async _transferTokens(to, amount) {
+  async _transferTokens(to : string, amount : string) {
     // Sending a transaction is a complex operation:
     //   - The user can reject it
     //   - It can fail before reaching the ethereum network (i.e. if the user
@@ -294,6 +332,9 @@ export class Dapp extends React.Component {
 
       // We send the transaction, and save its hash in the Dapp's state. This
       // way we can indicate that we are waiting for it to be mined.
+      if (!this._token) {
+        throw new Error("Token contract not initialized");
+      }
       const tx = await this._token.transfer(to, amount);
       this.setState({ txBeingSent: tx.hash });
 
@@ -341,11 +382,10 @@ export class Dapp extends React.Component {
 
   // This is an utility method that turns an RPC error into a human readable
   // message.
-  _getRpcErrorMessage(error) {
+  _getRpcErrorMessage(error : ErrorType) : string {
     if (error.data) {
       return error.data.message;
     }
-
     return error.message;
   }
 

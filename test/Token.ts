@@ -4,7 +4,10 @@
 // Hardhat tests are normally written with Mocha and Chai.
 
 // We import Chai to use its asserting functions here.
-const { expect } = require("chai");
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+import {Contract} from "ethers";
 
 // `describe` is a Mocha function that allows you to organize your tests. It's
 // not actually needed, but having your tests organized makes debugging them
@@ -24,11 +27,11 @@ describe("Token contract", function () {
   // `before` and `beforeEach` callbacks.
 
   let Token;
-  let hardhatToken;
-  let owner;
-  let addr1;
-  let addr2;
-  let addrs;
+  let hardhatToken : Contract;
+  let owner : SignerWithAddress;
+  let addr1 : SignerWithAddress;
+  let addr2 : SignerWithAddress;
+  let addrs : SignerWithAddress[];
 
   // `beforeEach` will run before each test, re-deploying the contract every
   // time. It receives a callback, which can be async.
@@ -42,9 +45,7 @@ describe("Token contract", function () {
     // mined.
     hardhatToken = await Token.deploy();
     await hardhatToken.deployed();
-
     // We can interact with the contract by calling `hardhatToken.method()`
-    await hardhatToken.deployed();
   });
 
   // You can nest describe calls to create subsections.
