@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   transferTokens: (to: string, amount: string) => {};
   tokenSymbol?: string;
