@@ -320,7 +320,6 @@ export class Dapp extends React.Component<{}, DappState> {
     // do it.
 
     try {
-      console.log(this);
       // If a transaction fails, we save that error in the component's state.
       // We only save one such error, so before sending a second transaction, we
       // clear it.
