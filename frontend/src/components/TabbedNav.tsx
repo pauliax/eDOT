@@ -6,13 +6,12 @@ import Tab from "react-bootstrap/Tab";
 import { Transfer } from "./Transfer";
 import { NoTokensMessage } from "./NoTokensMessage";
 import { Staking } from "./Staking";
+import { Farming } from "./Farming";
 
 import "../styles/tabs.scss";
 
 export const TabbedNav = () => {
-  const { balance, selectedAddress, symbol, transferFunc } = useContext(
-    Web3Context,
-  );
+  const { balance, selectedAddress, transferFunc } = useContext(Web3Context);
 
   return (
     <Tabs defaultActiveKey="transfer" id="tabs">
@@ -40,7 +39,7 @@ export const TabbedNav = () => {
         <Staking />
       </Tab>
       <Tab eventKey="farming" title="Farming">
-        <p>Farming</p>
+        <Farming />
       </Tab>
     </Tabs>
   );

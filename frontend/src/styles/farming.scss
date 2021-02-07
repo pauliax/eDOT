@@ -1,0 +1,13 @@
+.farm-container {
+    display: flex; 
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    .nes-container {
+        padding: 1rem 1.5rem;
+        width: fit-content;
+        margin: 1rem !important;
+    }
+    .farm-text {
+        margin-left: 2rem;
+    }
+}
