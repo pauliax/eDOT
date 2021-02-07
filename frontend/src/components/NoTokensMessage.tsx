@@ -1,5 +1,5 @@
 type Props = {
-  selectedAddress: string;
+  selectedAddress?: string;
 };
 
 export function NoTokensMessage({ selectedAddress }: Props) {

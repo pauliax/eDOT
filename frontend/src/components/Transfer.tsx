@@ -1,5 +1,5 @@
 type Props = {
-  transferTokens: (to: string, amount: string) => {};
+  transferTokens: (to: string, amount: string) => void;
   tokenSymbol?: string;
 };
 

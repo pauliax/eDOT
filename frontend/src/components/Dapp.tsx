@@ -11,10 +11,11 @@ import contractAddress from "../contracts/contract-address.json";
 import { NoWalletDetected } from "./NoWalletDetected";
 import { ConnectWallet } from "./ConnectWallet";
 import { Loading } from "./Loading";
-import { Transfer } from "./Transfer";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
-import { NoTokensMessage } from "./NoTokensMessage";
+import { TabbedNav } from "./TabbedNav";
+
+import { Web3Context } from "../contexts/Context";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
@@ -119,6 +120,12 @@ export class Dapp extends React.Component<{}, DappState> {
       return <Loading />;
     }
 
+    const { balance, selectedAddress, tokenData } = this.state;
+
+    const { symbol } = tokenData;
+    const transferFunc = (to: string, amount: string) =>
+      this._transferTokens(to, amount);
+
     // If everything is loaded, we render the application.
     return (
       <div className="container p-4">
@@ -165,27 +172,11 @@ export class Dapp extends React.Component<{}, DappState> {
 
         <div className="row">
           <div className="col-12">
-            {/*
-              If the user has no tokens, we don't show the Transfer form
-            */}
-            {this.state.balance.eq(0) && (
-              <NoTokensMessage selectedAddress={this.state.selectedAddress} />
-            )}
-
-            {/*
-              This component displays a form that the user can use to send a 
-              transaction and transfer some tokens.
-              The component doesn't have logic, it just calls the transferTokens
-              callback.
-            */}
-            {this.state.balance.gt(0) && (
-              <Transfer
-                transferTokens={(to, amount) =>
-                  this._transferTokens(to, amount)
-                }
-                tokenSymbol={this.state.tokenData.symbol}
-              />
-            )}
+            <Web3Context.Provider
+              value={{ balance, selectedAddress, symbol, transferFunc }}
+            >
+              <TabbedNav />
+            </Web3Context.Provider>
           </div>
         </div>
       </div>
@@ -329,6 +320,7 @@ export class Dapp extends React.Component<{}, DappState> {
     // do it.
 
     try {
+      console.log(this);
       // If a transaction fails, we save that error in the component's state.
       // We only save one such error, so before sending a second transaction, we
       // clear it.
