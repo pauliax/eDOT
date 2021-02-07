@@ -5,6 +5,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import { Transfer } from "./Transfer";
 import { NoTokensMessage } from "./NoTokensMessage";
+import { Staking } from "./Staking";
 
 import "../styles/tabs.scss";
 
@@ -30,13 +31,13 @@ export const TabbedNav = () => {
                         callback.
                         */}
             {balance?.gt(0) && transferFunc && (
-              <Transfer transferTokens={transferFunc} tokenSymbol={symbol} />
+              <Transfer transferTokens={transferFunc} />
             )}
           </div>
         </div>
       </Tab>
       <Tab eventKey="staking" title="Staking">
-        <p>Staking</p>
+        <Staking />
       </Tab>
       <Tab eventKey="farming" title="Farming">
         <p>Farming</p>

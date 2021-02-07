@@ -5,7 +5,6 @@ import "../styles/transfer.scss";
 
 type Props = {
   transferTokens: (to: string, amount: string) => void;
-  tokenSymbol?: string;
 };
 
 type TransferData = {
@@ -13,13 +12,13 @@ type TransferData = {
   to?: string;
 };
 
-export function Transfer({ transferTokens, tokenSymbol }: Props) {
+export function Transfer({ transferTokens }: Props) {
   const [transferData, setTransferData] = useState<TransferData>({
     amount: "",
     to: "",
   });
 
-  const { balance } = useContext(Web3Context);
+  const { balance, symbol } = useContext(Web3Context);
 
   const onMaxClick = () => {
     const amount = balance?.toString();
@@ -33,11 +32,9 @@ export function Transfer({ transferTokens, tokenSymbol }: Props) {
 
   return (
     <div>
-      <h4>Transfer</h4>
+      <h4 className="text-center">Transfer</h4>
       <form
         onSubmit={(event) => {
-          // This function just calls the transferTokens callback with the
-          // form's data.
           event.preventDefault();
 
           const { to, amount } = transferData;
@@ -52,7 +49,7 @@ export function Transfer({ transferTokens, tokenSymbol }: Props) {
         }}
       >
         <div className="form-group nes-field">
-          <label htmlFor="amount_field">Amount of {tokenSymbol}</label>
+          <label htmlFor="amount_field">Amount of {symbol}</label>
           <input
             id="amount_field"
             className="nes-input"
