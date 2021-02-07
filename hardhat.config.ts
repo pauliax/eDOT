@@ -8,7 +8,7 @@ import "hardhat-typechain";
 import "./tasks/faucet";
 
 const config: HardhatUserConfig = {
-  solidity: "0.7.3",
+  solidity: "0.7.6",
   // defaultNetwork: "hardhat",
 };
 
