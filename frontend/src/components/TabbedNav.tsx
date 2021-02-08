@@ -15,7 +15,7 @@ export const TabbedNav = () => {
 
   return (
     <Tabs defaultActiveKey="transfer" id="tabs">
-      <Tab eventKey="transfer" title="Transfer">
+      <Tab eventKey="transfer" title="📥 Transfer">
         <div className="row">
           <div className="col-12">
             {!balance && <p>balance</p>}
@@ -35,10 +35,10 @@ export const TabbedNav = () => {
           </div>
         </div>
       </Tab>
-      <Tab eventKey="staking" title="Staking">
+      <Tab eventKey="staking" title="🔒 Staking">
         <Staking />
       </Tab>
-      <Tab eventKey="farming" title="Farming">
+      <Tab eventKey="farming" title="🌾 Farming">
         <Farming />
       </Tab>
     </Tabs>

@@ -130,23 +130,63 @@ export class Dapp extends React.Component<{}, DappState> {
     return (
       <div className="container p-4">
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 text-right">
+            <a
+              href="https://app.uniswap.org/"
+              target="_blank"
+              className="dark-text mx-4"
+              rel="noreferrer noopener"
+            >
+              FAQ
+            </a>
+            <a
+              href="https://app.uniswap.org/"
+              target="_blank"
+              className="dark-text mx-4"
+              rel="noreferrer noopener"
+            >
+              Trade
+            </a>
+            <a
+              href="https://app.uniswap.org/"
+              target="_blank"
+              className="dark-text mx-4"
+              rel="noreferrer noopener"
+            >
+              About
+            </a>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 d-flex align-items-center">
+            <i className="nes-octocat animate"></i>
             <h1>
-              {this.state.tokenData.name} ({this.state.tokenData.symbol})
+              <span className="text-center text-danger ml-2">
+                {this.state.tokenData.symbol}
+              </span>{" "}
+              TOKEN
             </h1>
-            <p>
-              Welcome <b>{this.state.selectedAddress}</b>
+          </div>
+          <div className="col-12 text-center">
+            <h3>⯬ {this.state.tokenData.name} ⯮</h3>
+            <p className="nes-text is-disabled">
+              An attempt to bring DOT token (Polkadot) to the BSC (Binance)
+              network.
             </p>
-            <p>
-              You have {this.state.balance.toString()}{" "}
-              {this.state.tokenData.symbol}
-            </p>
+            <section className="message -right">
+              <div className="nes-balloon from-right">
+                <p>Welcome, {this.state.selectedAddress}</p>
+                <p>
+                  You have {this.state.balance.toString()}{" "}
+                  {this.state.tokenData.symbol}
+                  <i className="nes-icon coin"></i>
+                </p>
+              </div>
+            </section>
           </div>
         </div>
 
-        <hr />
-
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-12">
             {/* 
               Sending a transaction isn't an immediate action. You have to wait

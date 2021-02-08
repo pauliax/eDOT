@@ -32,7 +32,14 @@ export function Transfer({ transferTokens }: Props) {
 
   return (
     <div>
-      <h4 className="text-center">Transfer</h4>
+      <h4 className="text-center">
+        <span className="nes-text is-primary">#</span> Transfer
+      </h4>
+      <p className="text-center my-4">
+        Transfer tokens to other users. Enter the recipient's address and amount
+        you wish to transfer, approve and submit a transaction.{" "}
+        <a href="#top">Read more here</a>.
+      </p>
       <form
         onSubmit={(event) => {
           event.preventDefault();

@@ -30,7 +30,14 @@ export function Staking() {
 
   return (
     <div>
-      <h4 className="text-center">Staking</h4>
+      <h4 className="text-center">
+        <span className="nes-text is-success">#</span> Staking
+      </h4>
+      <p className="text-center my-4">
+        Stake tokens to receive APY every week. Unstake tokens to get them back.
+        To do that, you need to enter the amount, approve and submit a
+        transaction. <a href="#top">Read more here</a>.
+      </p>
       <div className="nes-badge is-splited">
         <span className="is-dark">APY</span>
         <span className="is-success">40%</span>
