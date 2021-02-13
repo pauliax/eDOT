@@ -1,6 +1,6 @@
-import { ethers, network, artifacts } from "hardhat";
-import { Contract } from "ethers";
+import { ethers, network, artifacts, upgrades } from "hardhat";
 import * as fs from "fs";
+import { Contract } from "ethers";
 
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
@@ -23,17 +23,49 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
-  await token.deployed();
+  // set init params
+  const owner = await deployer.getAddress();
+  const BASE_CPI = ethers.utils.parseUnits("1", 20);
 
-  console.log("Token address:", token.address);
+  // deploy UFragments
+  const uFragments = await (
+    await upgrades.deployProxy(
+      (await ethers.getContractFactory("UFragments")).connect(deployer),
+      [owner],
+      {
+        initializer: "initialize(address)",
+      },
+    )
+  ).deployed();
+  console.log("UFragments deployed to:", uFragments.address);
 
-  // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(token);
+  // deploy Policy
+  const uFragmentsPolicy = await (
+    await upgrades.deployProxy(
+      (await ethers.getContractFactory("UFragmentsPolicy")).connect(deployer),
+      [owner, uFragments.address, BASE_CPI.toString()],
+      {
+        initializer: "initialize(address,address,uint256)",
+      },
+    )
+  ).deployed();
+  console.log("UFragmentsPolicy deployed to:", uFragmentsPolicy.address);
+
+  // deploy Orchestrator
+  const orchestrator = await (await ethers.getContractFactory("Orchestrator"))
+    .connect(deployer)
+    .deploy(uFragmentsPolicy.address);
+  console.log("Orchestrator deployed to:", orchestrator.address);
+
+  // We also save the contract artifacts and addresses in the frontend directory
+  saveFrontendFiles(uFragments, uFragmentsPolicy, orchestrator);
 }
 
-function saveFrontendFiles(token: Contract) {
+function saveFrontendFiles(
+  uFragments: Contract,
+  uFragmentsPolicy: Contract,
+  orchestrator: Contract,
+) {
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
   if (!fs.existsSync(contractsDir)) {
@@ -42,14 +74,34 @@ function saveFrontendFiles(token: Contract) {
 
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
-    JSON.stringify({ Token: token.address }, undefined, 2),
+    JSON.stringify(
+      {
+        UFragments: uFragments.address,
+        UFragmentsPolicy: uFragmentsPolicy.address,
+        Orchestrator: orchestrator.address,
+      },
+      undefined,
+      2,
+    ),
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("Token");
+  const UFragmentsArtifact = artifacts.readArtifactSync("UFragments");
+  const UFragmentsPolicyArtifact = artifacts.readArtifactSync(
+    "UFragmentsPolicy",
+  );
+  const OrchestratorArtifact = artifacts.readArtifactSync("Orchestrator");
 
   fs.writeFileSync(
-    contractsDir + "/Token.json",
-    JSON.stringify(TokenArtifact, null, 2),
+    contractsDir + "/UFragments.json",
+    JSON.stringify(UFragmentsArtifact, null, 2),
+  );
+  fs.writeFileSync(
+    contractsDir + "/UFragmentsPolicy.json",
+    JSON.stringify(UFragmentsPolicyArtifact, null, 2),
+  );
+  fs.writeFileSync(
+    contractsDir + "/Orchestrator.json",
+    JSON.stringify(OrchestratorArtifact, null, 2),
   );
 }
 

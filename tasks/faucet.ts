@@ -26,12 +26,12 @@ task("faucet", "Sends ETH and tokens to an address")
     const addressJson = fs.readFileSync(addressesFile);
     const address = JSON.parse(addressJson.toString());
 
-    if ((await hre.ethers.provider.getCode(address.Token)) === "0x") {
+    if ((await hre.ethers.provider.getCode(address.UFragments)) === "0x") {
       console.error("You need to deploy your contract first");
       return;
     }
 
-    const token = await hre.ethers.getContractAt("Token", address.Token);
+    const token = await hre.ethers.getContractAt("UFragments", address.UFragments);
     const [sender] = await hre.ethers.getSigners();
 
     const tx = await token.transfer(receiver, 100);

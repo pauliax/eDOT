@@ -14,6 +14,7 @@ import { Loading } from "./Loading";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { TabbedNav } from "./TabbedNav";
+import { NoTokensMessage } from "./NoTokensMessage";
 
 import { Web3Context } from "../contexts/Context";
 
@@ -212,6 +213,14 @@ export class Dapp extends React.Component<{}, DappState> {
 
         <div className="row">
           <div className="col-12">
+          {!balance && <p>balance</p>}
+          {balance?.eq(0) && (
+            <div className="row text-center">
+              <div className="col-12">
+                <NoTokensMessage selectedAddress={selectedAddress} />
+              </div>
+            </div>
+          )}
             <Web3Context.Provider
               value={{ balance, selectedAddress, symbol, transferFunc }}
             >
@@ -292,7 +301,7 @@ export class Dapp extends React.Component<{}, DappState> {
     // When, we initialize the contract using that provider and the token's
     // artifact. You can do this same thing with your contracts.
     this._token = new ethers.Contract(
-      contractAddress.Token,
+      contractAddress.UFragments,
       TokenArtifact.abi,
       this._provider.getSigner(0),
     );
