@@ -227,7 +227,7 @@ contract UFragmentsPolicy is OwnableUpgradeable {
    * @return globalAmpleforthEpoch The current epoch number.
    * @return globalAMPLSupply The total supply at the current epoch.
    */
-  function globalAmpleforthEpochAndAMPLSupply() external view returns (uint256, uint256) {
+  function globalEpochAndAMPLSupply() external view returns (uint256, uint256) {
     return (epoch, uFrags.totalSupply());
   }
 
