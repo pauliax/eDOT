@@ -15,6 +15,7 @@ import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { TabbedNav } from "./TabbedNav";
 import { NoTokensMessage } from "./NoTokensMessage";
+import { Footer } from "./Footer";
 
 import { Web3Context } from "../contexts/Context";
 
@@ -174,15 +175,13 @@ export class Dapp extends React.Component<{}, DappState> {
               An attempt to bring DOT token (Polkadot) to the BSC (Binance)
               network.
             </p>
-            <section className="message -right">
-              <div className="nes-balloon from-right">
-                <p>Welcome, {this.state.selectedAddress}</p>
-                <p>
-                  You have {this.state.balance.toString()}{" "}
-                  {this.state.tokenData.symbol}
-                  <i className="nes-icon coin"></i>
-                </p>
-              </div>
+            <section className="nes-container is-rounded">
+              <p>Welcome, {this.state.selectedAddress}</p>
+              <p>
+                You have {this.state.balance.toString()}{" "}
+                {this.state.tokenData.symbol}
+                <i className="nes-icon coin"></i>
+              </p>
             </section>
           </div>
         </div>
@@ -213,19 +212,25 @@ export class Dapp extends React.Component<{}, DappState> {
 
         <div className="row">
           <div className="col-12">
-          {!balance && <p>balance</p>}
-          {balance?.eq(0) && (
-            <div className="row text-center">
-              <div className="col-12">
-                <NoTokensMessage selectedAddress={selectedAddress} />
+            {!balance && <p>balance</p>}
+            {balance?.eq(0) && (
+              <div className="row text-center nes-container is-rounded mb-4">
+                <div className="col-12">
+                  <NoTokensMessage selectedAddress={selectedAddress} />
+                </div>
               </div>
-            </div>
-          )}
+            )}
             <Web3Context.Provider
               value={{ balance, selectedAddress, symbol, transferFunc }}
             >
               <TabbedNav />
             </Web3Context.Provider>
+          </div>
+        </div>
+
+        <div className="row text-center">
+          <div className="col-12">
+            <Footer footerText={tokenData?.name} />
           </div>
         </div>
       </div>

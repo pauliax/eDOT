@@ -31,7 +31,10 @@ task("faucet", "Sends ETH and tokens to an address")
       return;
     }
 
-    const token = await hre.ethers.getContractAt("UFragments", address.UFragments);
+    const token = await hre.ethers.getContractAt(
+      "UFragments",
+      address.UFragments,
+    );
     const [sender] = await hre.ethers.getSigners();
 
     const tx = await token.transfer(receiver, 100);
