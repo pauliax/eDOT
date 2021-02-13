@@ -6,6 +6,7 @@ import Tab from "react-bootstrap/Tab";
 import { Transfer } from "./Transfer";
 import { Staking } from "./Staking";
 import { Farming } from "./Farming";
+import { Rebase } from "./Rebase";
 
 import "../styles/tabs.scss";
 
@@ -24,6 +25,9 @@ export const TabbedNav = () => {
           </Tab>
           <Tab eventKey="farming" title="🌾 Farming">
             <Farming />
+          </Tab>
+          <Tab eventKey="rebase" title="⚖️ Rebase">
+            <Rebase />
           </Tab>
         </Tabs>
       )}
