@@ -6,26 +6,29 @@
     "test": "test"
   },
   "scripts": {
+    "compile": "npx hardhat compile",
+    "deploy-local": "npx hardhat --network localhost run scripts/deploy.ts",
+    "test": "npx hardhat test",
     "format": "prettier --write **/*.ts{,x}",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "hardhat test"
+    "serve-frontend": "cd frontend && npm run start"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nomiclabs/hardhat-hackathon-boilerplate.git"
+    "url": "git+https://github.com/pauliax/Hardhat-boilerplate.git"
   },
   "keywords": [
     "hardhat",
     "ethereum",
     "hackathon"
   ],
-  "author": "Nomic Labs",
+  "author": "Paul",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nomiclabs/hardhat-hackathon-boilerplate/issues"
+    "url": "https://github.com/pauliax/Hardhat-boilerplate/issues"
   },
-  "homepage": "https://github.com/nomiclabs/hardhat-hackathon-boilerplate#readme",
+  "homepage": "https://github.com/pauliax/Hardhat-boilerplate#readme",
   "dependencies": {
     "@openzeppelin/contracts": "^3.4.0",
     "@openzeppelin/contracts-upgradeable": "^3.4.0"
