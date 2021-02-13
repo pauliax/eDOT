@@ -5,6 +5,9 @@ import { BigNumber, ethers } from "ethers";
 // using them with ethers
 import TokenArtifact from "../contracts/Token.json";
 import contractAddress from "../contracts/contract-address.json";
+
+import { Web3Context } from "../contexts/Context";
+
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
 // logic. They just render HTML.
@@ -16,8 +19,9 @@ import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { TabbedNav } from "./TabbedNav";
 import { NoTokensMessage } from "./NoTokensMessage";
 import { Footer } from "./Footer";
-
-import { Web3Context } from "../contexts/Context";
+import { CopyToClipboard } from "./CopyToClipboard";
+import { TopNav } from "./TopNav";
+import { FAQ } from "./FAQ";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
@@ -133,30 +137,7 @@ export class Dapp extends React.Component<{}, DappState> {
       <div className="container p-4">
         <div className="row">
           <div className="col-12 text-right">
-            <a
-              href="https://app.uniswap.org/"
-              target="_blank"
-              className="dark-text mx-4"
-              rel="noreferrer noopener"
-            >
-              FAQ
-            </a>
-            <a
-              href="https://app.uniswap.org/"
-              target="_blank"
-              className="dark-text mx-4"
-              rel="noreferrer noopener"
-            >
-              Trade
-            </a>
-            <a
-              href="https://app.uniswap.org/"
-              target="_blank"
-              className="dark-text mx-4"
-              rel="noreferrer noopener"
-            >
-              About
-            </a>
+            <TopNav />
           </div>
         </div>
         <div className="row">
@@ -172,11 +153,13 @@ export class Dapp extends React.Component<{}, DappState> {
           <div className="col-12 text-center">
             <h3>⯬ {this.state.tokenData.name} ⯮</h3>
             <p className="nes-text is-disabled">
-              An attempt to bring DOT token (Polkadot) to the BSC (Binance)
-              network.
+              An attempt to bring Polkadot token to the Binance Smart Chain
             </p>
             <section className="nes-container is-rounded">
-              <p>Welcome, {this.state.selectedAddress}</p>
+              <p>
+                Welcome, {this.state.selectedAddress}
+                <CopyToClipboard copyText={this.state.selectedAddress} />
+              </p>
               <p>
                 You have {this.state.balance.toString()}{" "}
                 {this.state.tokenData.symbol}
@@ -228,7 +211,14 @@ export class Dapp extends React.Component<{}, DappState> {
           </div>
         </div>
 
-        <div className="row text-center">
+        <div className="row text-center" id="faq">
+          <div className="col-12">
+            <h4 className="text-center">Frequently Asked Questions</h4>
+            <FAQ />
+          </div>
+        </div>
+
+        <div className="row text-center mt-5">
           <div className="col-12">
             <Footer footerText={tokenData?.name} />
           </div>
