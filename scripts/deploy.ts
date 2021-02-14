@@ -57,14 +57,38 @@ async function main() {
     .deploy(uFragmentsPolicy.address);
   console.log("Orchestrator deployed to:", orchestrator.address);
 
+  // deploy oracle
+  const reportExpirationTimeSec_ = 86400; // 1 day
+  const reportDelaySec_ = 60; // 1 minute
+  const minimumProviders_ = 1; // min 1 provider
+
+  const MedianOracle = await ethers.getContractFactory("MedianOracle");
+  const medianOracle = await MedianOracle.deploy(
+    reportExpirationTimeSec_,
+    reportDelaySec_,
+    minimumProviders_,
+  );
+  await medianOracle.deployed();
+  console.log("Median Oracle address:", medianOracle.address);
+
+  // authorize owner as oracle data provider
+  await medianOracle.addProvider(owner);
+
   // We also save the contract artifacts and addresses in the frontend directory
-  saveFrontendFiles(uFragments, uFragmentsPolicy, orchestrator);
+  saveFrontendFiles
+  (
+    uFragments,
+    uFragmentsPolicy,
+    orchestrator,
+    medianOracle
+  );
 }
 
 function saveFrontendFiles(
   uFragments: Contract,
   uFragmentsPolicy: Contract,
   orchestrator: Contract,
+  medianOracle: Contract,
 ) {
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
@@ -79,6 +103,7 @@ function saveFrontendFiles(
         UFragments: uFragments.address,
         UFragmentsPolicy: uFragmentsPolicy.address,
         Orchestrator: orchestrator.address,
+        MedianOracle: medianOracle.address,
       },
       undefined,
       2,
@@ -90,6 +115,7 @@ function saveFrontendFiles(
     "UFragmentsPolicy",
   );
   const OrchestratorArtifact = artifacts.readArtifactSync("Orchestrator");
+  const MedianOracleArtifact = artifacts.readArtifactSync("MedianOracle");
 
   fs.writeFileSync(
     contractsDir + "/UFragments.json",
@@ -102,6 +128,10 @@ function saveFrontendFiles(
   fs.writeFileSync(
     contractsDir + "/Orchestrator.json",
     JSON.stringify(OrchestratorArtifact, null, 2),
+  );
+  fs.writeFileSync(
+    contractsDir + "/MedianOracle.json",
+    JSON.stringify(MedianOracleArtifact, null, 2),
   );
 }
 

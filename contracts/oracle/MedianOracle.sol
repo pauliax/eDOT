@@ -229,7 +229,7 @@ contract MedianOracle is Ownable, IOracle {
         delete providerReports[provider];
         for (uint256 i = 0; i < providers.length; i++) {
             if (providers[i] == provider) {
-                if (i + 1  != providers.length) {
+                if (i + 1 != providers.length) {
                     providers[i] = providers[providers.length-1];
                 }
                 providers.pop();
