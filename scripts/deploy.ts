@@ -117,6 +117,13 @@ async function main() {
 
   await farmController.setRates([3, 3, 2, 1, 1]);
 
+  // Allocate 10% of total supply to the initial farms
+  const ownerBalance = await uFragments.balanceOf(owner);
+  const INITIAL_REWARDS = ownerBalance.div(10);
+  console.log("Balance, INITIAL_REWARDS:", ownerBalance.toString(), INITIAL_REWARDS.toString());
+  await uFragments.approve(farmController.address, INITIAL_REWARDS);
+  await farmController.notifyRewards(INITIAL_REWARDS);
+
   // We also save the contract artifacts and addresses in the frontend directory
   saveFrontendFiles(
     uFragments,
