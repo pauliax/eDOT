@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 
 export function FAQ() {
   return (
-    <Accordion defaultActiveKey="0" className="text-left">
+    <Accordion className="text-left">
       <Card>
         <Accordion.Toggle as={Card.Header} eventKey="0">
           One

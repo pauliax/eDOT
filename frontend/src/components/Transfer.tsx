@@ -61,7 +61,7 @@ export function Transfer({ transferTokens }: Props) {
             id="amount_field"
             className="nes-input"
             type="number"
-            step="1"
+            step="any"
             min="0"
             name="amount"
             placeholder="1"
@@ -80,7 +80,7 @@ export function Transfer({ transferTokens }: Props) {
           </div>
         </div>
         <div className="form-group nes-field">
-          <label htmlFor="recipient_field">Recipient address</label>
+          <label htmlFor="recipient_field">Recipient's address</label>
           <input
             id="recipient_field"
             className="nes-input"

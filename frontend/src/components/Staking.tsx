@@ -83,7 +83,7 @@ export function Staking() {
             id="amount_field"
             className="nes-input"
             type="number"
-            step="1"
+            step="any"
             min="0"
             name="amount"
             placeholder="1"
@@ -100,7 +100,7 @@ export function Staking() {
               MAX
             </button>
             <p className="text-left">
-              Staked amount: <span>0</span>
+              Total staked amount: <span>0</span>
             </p>
           </div>
         </div>

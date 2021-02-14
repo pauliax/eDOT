@@ -169,7 +169,8 @@ export class Dapp extends React.Component<{}, DappState> {
             </p>
             <section className="nes-container is-rounded">
               <p>
-                Welcome, {this.state.selectedAddress}
+                Welcome,{" "}
+                <span className="break-text">{this.state.selectedAddress}</span>
                 <CopyToClipboard copyText={this.state.selectedAddress} />
               </p>
               <p>
@@ -233,6 +234,18 @@ export class Dapp extends React.Component<{}, DappState> {
           <div className="col-12">
             <h4 className="text-center">Frequently Asked Questions</h4>
             <FAQ />
+          </div>
+        </div>
+
+        <div className="row text-center mt-5">
+          <div className="col-12">
+            <section className="nes-container is-rounded with-title is-centered">
+              <p className="nes-text is-error title">Attention!</p>
+              <span className="nes-text is-dark">
+                This DApp is still under construction. Use it at your own risk.
+                If in doubt, consult with your lawyer.
+              </span>
+            </section>
           </div>
         </div>
 
