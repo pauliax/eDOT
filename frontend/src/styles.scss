@@ -1,15 +1,32 @@
 @import "../node_modules/nes.css/css/nes.css";
 
-.dark-text {
-    color: #212529;
-}
-
 body {
     background: antiquewhite;
+
+    .nes-container {
+        background: white;
+    }
+
+    .theme-text {
+        color: #212529;
+    }
 }
 
-.nes-container {
-    background: white;
+body.dark-theme {
+    background: #212529;
+    color: white;
+
+    .nes-container {
+        background: #212529;
+    }
+
+    .theme-text {
+        color: white;
+    }
+}
+
+.card {
+    background: inherit;
 }
 
 .nes-dialog {
@@ -27,4 +44,8 @@ a:hover, button:hover {
 
 .break-text {
     overflow-wrap: break-word;
+}
+
+.fit {
+    width: fit-content;
 }
