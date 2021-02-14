@@ -109,60 +109,13 @@ async function main() {
   ).deployed();
   console.log("FarmController deployed to:", farmController.address);
 
-  const farm1 = await (
-    await upgrades.deployProxy(
-      (await ethers.getContractFactory("LPFarm")).connect(deployer),
-      [token1.address, farmController.address],
-      {
-        initializer: "initialize(address, address)",
-      },
-    )
-  ).deployed();
-  console.log("LP farm 1 deployed to:", farm1.address);
+  await farmController.addFarm(token1.address);
+  await farmController.addFarm(token2.address);
+  await farmController.addFarm(token3.address);
+  await farmController.addFarm(token4.address);
+  await farmController.addFarm(token5.address);
 
-  const farm2 = await (
-    await upgrades.deployProxy(
-      (await ethers.getContractFactory("LPFarm")).connect(deployer),
-      [token2.address, farmController.address],
-      {
-        initializer: "initialize(address, address)",
-      },
-    )
-  ).deployed();
-  console.log("LP farm 2 deployed to:", farm2.address);
-
-  const farm3 = await (
-    await upgrades.deployProxy(
-      (await ethers.getContractFactory("LPFarm")).connect(deployer),
-      [token3.address, farmController.address],
-      {
-        initializer: "initialize(address, address)",
-      },
-    )
-  ).deployed();
-  console.log("LP farm 3 deployed to:", farm3.address);
-
-  const farm4 = await (
-    await upgrades.deployProxy(
-      (await ethers.getContractFactory("LPFarm")).connect(deployer),
-      [token4.address, farmController.address],
-      {
-        initializer: "initialize(address, address)",
-      },
-    )
-  ).deployed();
-  console.log("LP farm 4 deployed to:", farm4.address);
-
-  const farm5 = await (
-    await upgrades.deployProxy(
-      (await ethers.getContractFactory("LPFarm")).connect(deployer),
-      [token5.address, farmController.address],
-      {
-        initializer: "initialize(address, address)",
-      },
-    )
-  ).deployed();
-  console.log("LP farm 5 deployed to:", farm5.address);
+  await farmController.setRates([3, 3, 2, 1, 1]);
 
   // We also save the contract artifacts and addresses in the frontend directory
   saveFrontendFiles(
@@ -176,11 +129,6 @@ async function main() {
     token4,
     token5,
     farmController,
-    farm1,
-    farm2,
-    farm3,
-    farm4,
-    farm5,
   );
 }
 
@@ -195,11 +143,6 @@ function saveFrontendFiles(
   token4: Contract,
   token5: Contract,
   farmController: Contract,
-  farm1: Contract,
-  farm2: Contract,
-  farm3: Contract,
-  farm4: Contract,
-  farm5: Contract,
 ) {
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
@@ -221,11 +164,6 @@ function saveFrontendFiles(
         Token4: token4.address,
         Token5: token5.address,
         FarmController: farmController.address,
-        Farm1: farm1.address,
-        Farm2: farm2.address,
-        Farm3: farm3.address,
-        Farm4: farm4.address,
-        Farm5: farm5.address,
       },
       undefined,
       2,
