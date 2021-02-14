@@ -4,9 +4,10 @@ import { BigNumber, ethers } from "ethers";
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import TokenArtifact from "../contracts/Token.json";
+import OrchestratorArtifact from "../contracts/Orchestrator.json";
 import contractAddress from "../contracts/contract-address.json";
 
-import { Web3Context } from "../contexts/Context";
+import { Web3Context, ContractsContext } from "../contexts/Context";
 
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
@@ -77,6 +78,8 @@ export class Dapp extends React.Component<{}, DappState> {
 
   private _token?: ethers.Contract;
 
+  private _orchestrator?: ethers.Contract;
+
   private _pollDataInterval?: number;
 
   private initialState: DappState = {
@@ -129,8 +132,11 @@ export class Dapp extends React.Component<{}, DappState> {
     const { balance, selectedAddress, tokenData } = this.state;
 
     const { symbol } = tokenData;
+
     const transferFunc = (to: string, amount: string) =>
       this._transferTokens(to, amount);
+
+    const contractOrchestrator = this._orchestrator;
 
     // If everything is loaded, we render the application.
     return (
@@ -141,14 +147,20 @@ export class Dapp extends React.Component<{}, DappState> {
           </div>
         </div>
         <div className="row">
-          <div className="col-12 d-flex align-items-center">
-            <i className="nes-octocat animate"></i>
-            <h1>
-              <span className="text-center text-danger ml-2">
-                {this.state.tokenData.symbol}
-              </span>{" "}
-              TOKEN
-            </h1>
+          <div className="col-12">
+            <a
+              href="/"
+              rel="noopener noreferrer"
+              className="d-flex align-items-center"
+            >
+              <i className="nes-octocat animate"></i>
+              <h1>
+                <span className="text-center text-danger ml-2">
+                  {this.state.tokenData.symbol}
+                </span>{" "}
+                TOKEN
+              </h1>
+            </a>
           </div>
           <div className="col-12 text-center">
             <h3>⯬ {this.state.tokenData.name} ⯮</h3>
@@ -157,7 +169,8 @@ export class Dapp extends React.Component<{}, DappState> {
             </p>
             <section className="nes-container is-rounded">
               <p>
-                Welcome, {this.state.selectedAddress}
+                Welcome,{" "}
+                <span className="break-text">{this.state.selectedAddress}</span>
                 <CopyToClipboard copyText={this.state.selectedAddress} />
               </p>
               <p>
@@ -206,7 +219,13 @@ export class Dapp extends React.Component<{}, DappState> {
             <Web3Context.Provider
               value={{ balance, selectedAddress, symbol, transferFunc }}
             >
-              <TabbedNav />
+              <ContractsContext.Provider
+                value={{
+                  contractOrchestrator,
+                }}
+              >
+                <TabbedNav />
+              </ContractsContext.Provider>
             </Web3Context.Provider>
           </div>
         </div>
@@ -215,6 +234,18 @@ export class Dapp extends React.Component<{}, DappState> {
           <div className="col-12">
             <h4 className="text-center">Frequently Asked Questions</h4>
             <FAQ />
+          </div>
+        </div>
+
+        <div className="row text-center mt-5">
+          <div className="col-12">
+            <section className="nes-container is-rounded with-title is-centered">
+              <p className="nes-text is-error title">Attention!</p>
+              <span className="nes-text is-dark">
+                This DApp is still under construction. Use it at your own risk.
+                If in doubt, consult with your lawyer.
+              </span>
+            </section>
           </div>
         </div>
 
@@ -298,6 +329,12 @@ export class Dapp extends React.Component<{}, DappState> {
     this._token = new ethers.Contract(
       contractAddress.UFragments,
       TokenArtifact.abi,
+      this._provider.getSigner(0),
+    );
+
+    this._orchestrator = new ethers.Contract(
+      contractAddress.Orchestrator,
+      OrchestratorArtifact.abi,
       this._provider.getSigner(0),
     );
   }

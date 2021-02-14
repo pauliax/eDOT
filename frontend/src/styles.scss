@@ -15,3 +15,16 @@ body {
 .nes-dialog {
     z-index: 999;
 }
+
+.btn:focus, .btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+a:hover, button:hover {
+    text-decoration: none !important;
+}
+
+.break-text {
+    overflow-wrap: break-word;
+}
