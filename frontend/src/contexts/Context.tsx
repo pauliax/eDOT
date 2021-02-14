@@ -17,3 +17,10 @@ type ContractsContextProps = {
 export const ContractsContext = createContext<Partial<ContractsContextProps>>(
   {},
 );
+
+type ThemeContextProps = {
+  isDarkTheme?: boolean;
+  setIsDarkTheme?: (isDark: boolean) => void;
+};
+
+export const ThemeContext = createContext<Partial<ThemeContextProps>>({});

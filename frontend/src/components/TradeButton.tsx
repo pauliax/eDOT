@@ -3,7 +3,7 @@ export function TradeButton() {
     <a
       href="https://app.uniswap.org/"
       target="_blank"
-      className="dark-text mx-4"
+      className="theme-text mx-4"
       rel="noreferrer noopener"
     >
       Trade

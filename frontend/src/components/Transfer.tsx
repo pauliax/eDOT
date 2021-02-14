@@ -56,9 +56,9 @@ export function Transfer({ transferTokens }: Props) {
         }}
       >
         <div className="form-group nes-field">
-          <label htmlFor="amount_field">Amount of {symbol}</label>
+          <label htmlFor="amount_transfer_field">Amount of {symbol}</label>
           <input
-            id="amount_field"
+            id="amount_transfer_field"
             className="nes-input"
             type="number"
             step="any"

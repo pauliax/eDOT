@@ -78,9 +78,9 @@ export function Staking() {
         }}
       >
         <div className="form-group nes-field">
-          <label htmlFor="amount_field">Amount of {symbol}</label>
+          <label htmlFor="amount_stake_field">Amount of {symbol}</label>
           <input
-            id="amount_field"
+            id="amount_stake_field"
             className="nes-input"
             type="number"
             step="any"

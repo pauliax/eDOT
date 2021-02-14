@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ThemeContext } from "../contexts/Context";
 
 export function About() {
+  const { isDarkTheme } = useContext(ThemeContext);
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
@@ -9,11 +11,14 @@ export function About() {
 
   return (
     <span>
-      <button className="btn btn-link mx-4 dark-text p-0" onClick={toggleModal}>
+      <button
+        className="btn btn-link mx-4 theme-text p-0"
+        onClick={toggleModal}
+      >
         About
       </button>
       <dialog
-        className="nes-dialog is-rounded"
+        className={"nes-dialog is-rounded " + (isDarkTheme ? "is-dark" : "")}
         id="dialog-rounded"
         open={showModal}
       >

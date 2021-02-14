@@ -7,7 +7,11 @@ import TokenArtifact from "../contracts/Token.json";
 import OrchestratorArtifact from "../contracts/Orchestrator.json";
 import contractAddress from "../contracts/contract-address.json";
 
-import { Web3Context, ContractsContext } from "../contexts/Context";
+import {
+  Web3Context,
+  ContractsContext,
+  ThemeContext,
+} from "../contexts/Context";
 
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
@@ -71,6 +75,7 @@ type DappState = {
   txBeingSent?: string;
   transactionError?: ErrorType;
   networkError?: string;
+  isDarkTheme?: boolean;
 };
 
 export class Dapp extends React.Component<{}, DappState> {
@@ -92,6 +97,7 @@ export class Dapp extends React.Component<{}, DappState> {
     txBeingSent: undefined,
     transactionError: undefined,
     networkError: undefined,
+    isDarkTheme: undefined,
   };
 
   constructor(props: any) {
@@ -129,7 +135,7 @@ export class Dapp extends React.Component<{}, DappState> {
       return <Loading />;
     }
 
-    const { balance, selectedAddress, tokenData } = this.state;
+    const { balance, selectedAddress, tokenData, isDarkTheme } = this.state;
 
     const { symbol } = tokenData;
 
@@ -138,12 +144,21 @@ export class Dapp extends React.Component<{}, DappState> {
 
     const contractOrchestrator = this._orchestrator;
 
+    const setIsDarkTheme = (isDark: boolean) => this._toggleTheme(isDark);
+
     // If everything is loaded, we render the application.
     return (
       <div className="container p-4">
         <div className="row">
           <div className="col-12 text-right">
-            <TopNav />
+            <ThemeContext.Provider
+              value={{
+                isDarkTheme,
+                setIsDarkTheme,
+              }}
+            >
+              <TopNav />
+            </ThemeContext.Provider>
           </div>
         </div>
         <div className="row">
@@ -151,7 +166,7 @@ export class Dapp extends React.Component<{}, DappState> {
             <a
               href="/"
               rel="noopener noreferrer"
-              className="d-flex align-items-center"
+              className="d-flex align-items-center fit"
             >
               <i className="nes-octocat animate"></i>
               <h1>
@@ -167,7 +182,11 @@ export class Dapp extends React.Component<{}, DappState> {
             <p className="nes-text is-disabled">
               An attempt to bring Polkadot token to the Binance Smart Chain
             </p>
-            <section className="nes-container is-rounded">
+            <section
+              className={
+                "nes-container is-rounded " + (isDarkTheme ? "is-dark" : "")
+              }
+            >
               <p>
                 Welcome,{" "}
                 <span className="break-text">{this.state.selectedAddress}</span>
@@ -210,7 +229,12 @@ export class Dapp extends React.Component<{}, DappState> {
           <div className="col-12">
             {!balance && <p>balance</p>}
             {balance?.eq(0) && (
-              <div className="row text-center nes-container is-rounded mb-4">
+              <div
+                className={
+                  "row text-center nes-container is-rounded mb-4 " +
+                  (isDarkTheme ? "is-dark" : "")
+                }
+              >
                 <div className="col-12">
                   <NoTokensMessage selectedAddress={selectedAddress} />
                 </div>
@@ -239,9 +263,14 @@ export class Dapp extends React.Component<{}, DappState> {
 
         <div className="row text-center mt-5">
           <div className="col-12">
-            <section className="nes-container is-rounded with-title is-centered">
+            <section
+              className={
+                "nes-container is-rounded with-title is-centered " +
+                (isDarkTheme ? "is-dark" : "")
+              }
+            >
               <p className="nes-text is-error title">Attention!</p>
-              <span className="nes-text is-dark">
+              <span>
                 This DApp is still under construction. Use it at your own risk.
                 If in doubt, consult with your lawyer.
               </span>
@@ -481,5 +510,9 @@ export class Dapp extends React.Component<{}, DappState> {
     });
 
     return false;
+  }
+
+  _toggleTheme(isDark: boolean) {
+    this.setState({ isDarkTheme: isDark });
   }
 }
