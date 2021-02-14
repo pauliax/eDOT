@@ -45,9 +45,9 @@ contract LPFarm is TokenWrapper, IRewardDistributionRecipientTokenOnly {
 
   uint256 public constant DURATION = 7 days;
 
-  uint256 public periodFinish = 0;
+  uint256 public periodFinish;
 
-  uint256 public rewardRate = 0;
+  uint256 public rewardRate;
 
   uint256 public lastUpdateTime;
 
@@ -89,6 +89,9 @@ contract LPFarm is TokenWrapper, IRewardDistributionRecipientTokenOnly {
     stakeToken = IERC20(_stakeToken);
     controller = FarmController(_controller);
     rewardToken = controller.rewardToken();
+
+    periodFinish = 0;
+    rewardRate = 0;
   }
 
   function lastTimeRewardApplicable() public view returns (uint256) {
