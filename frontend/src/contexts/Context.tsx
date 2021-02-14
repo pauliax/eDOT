@@ -9,3 +9,11 @@ type Web3ContextProps = {
 };
 
 export const Web3Context = createContext<Partial<Web3ContextProps>>({});
+
+type ContractsContextProps = {
+  contractOrchestrator?: any;
+};
+
+export const ContractsContext = createContext<Partial<ContractsContextProps>>(
+  {},
+);

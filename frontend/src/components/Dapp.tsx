@@ -4,9 +4,10 @@ import { BigNumber, ethers } from "ethers";
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import TokenArtifact from "../contracts/Token.json";
+import OrchestratorArtifact from "../contracts/Orchestrator.json";
 import contractAddress from "../contracts/contract-address.json";
 
-import { Web3Context } from "../contexts/Context";
+import { Web3Context, ContractsContext } from "../contexts/Context";
 
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
@@ -77,6 +78,8 @@ export class Dapp extends React.Component<{}, DappState> {
 
   private _token?: ethers.Contract;
 
+  private _orchestrator?: ethers.Contract;
+
   private _pollDataInterval?: number;
 
   private initialState: DappState = {
@@ -129,8 +132,11 @@ export class Dapp extends React.Component<{}, DappState> {
     const { balance, selectedAddress, tokenData } = this.state;
 
     const { symbol } = tokenData;
+
     const transferFunc = (to: string, amount: string) =>
       this._transferTokens(to, amount);
+
+    const contractOrchestrator = this._orchestrator;
 
     // If everything is loaded, we render the application.
     return (
@@ -206,7 +212,13 @@ export class Dapp extends React.Component<{}, DappState> {
             <Web3Context.Provider
               value={{ balance, selectedAddress, symbol, transferFunc }}
             >
-              <TabbedNav />
+              <ContractsContext.Provider
+                value={{
+                  contractOrchestrator,
+                }}
+              >
+                <TabbedNav />
+              </ContractsContext.Provider>
             </Web3Context.Provider>
           </div>
         </div>
@@ -298,6 +310,12 @@ export class Dapp extends React.Component<{}, DappState> {
     this._token = new ethers.Contract(
       contractAddress.UFragments,
       TokenArtifact.abi,
+      this._provider.getSigner(0),
+    );
+
+    this._orchestrator = new ethers.Contract(
+      contractAddress.Orchestrator,
+      OrchestratorArtifact.abi,
       this._provider.getSigner(0),
     );
   }
