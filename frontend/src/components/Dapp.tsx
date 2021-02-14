@@ -147,14 +147,20 @@ export class Dapp extends React.Component<{}, DappState> {
           </div>
         </div>
         <div className="row">
-          <div className="col-12 d-flex align-items-center">
-            <i className="nes-octocat animate"></i>
-            <h1>
-              <span className="text-center text-danger ml-2">
-                {this.state.tokenData.symbol}
-              </span>{" "}
-              TOKEN
-            </h1>
+          <div className="col-12">
+            <a
+              href="/"
+              rel="noopener noreferrer"
+              className="d-flex align-items-center"
+            >
+              <i className="nes-octocat animate"></i>
+              <h1>
+                <span className="text-center text-danger ml-2">
+                  {this.state.tokenData.symbol}
+                </span>{" "}
+                TOKEN
+              </h1>
+            </a>
           </div>
           <div className="col-12 text-center">
             <h3>⯬ {this.state.tokenData.name} ⯮</h3>

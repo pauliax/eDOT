@@ -41,6 +41,32 @@ export function Rebase() {
       <p className="text-center my-4">
         Rebase. <a href="#top">Read more here</a>.
       </p>
+      <div className="lists">
+        <ul className="nes-list is-circle">
+          <li>
+            Minimum Rebase Interval —
+            <strong className="nes-text is-error ml-4">100</strong> sec
+          </li>
+          <li>
+            Last Rebase Timestamp —
+            <strong className="nes-text is-error ml-4">
+              2021-02-14T09:52:26+00:00
+            </strong>{" "}
+            UTC
+          </li>
+          <li>
+            Rebase Window Offset In Seconds —
+            <strong className="nes-text is-error ml-4">20</strong> sec
+          </li>
+          <li>
+            Rebase Window Length In Seconds —
+            <strong className="nes-text is-error ml-4">5</strong> sec
+          </li>
+          <li>
+            Current Epoch —<strong className="nes-text is-error ml-4">2</strong>
+          </li>
+        </ul>
+      </div>
       <div className="text-center">
         <button
           type="button"
