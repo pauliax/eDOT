@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { BigNumber } from "ethers";
+import { BigNumber, Contract } from "ethers";
 
 type Web3ContextProps = {
   balance?: BigNumber;
@@ -11,7 +11,8 @@ type Web3ContextProps = {
 export const Web3Context = createContext<Partial<Web3ContextProps>>({});
 
 type ContractsContextProps = {
-  contractOrchestrator?: any;
+  contractOrchestrator?: Contract;
+  contractFarmController?: Contract;
 };
 
 export const ContractsContext = createContext<Partial<ContractsContextProps>>(

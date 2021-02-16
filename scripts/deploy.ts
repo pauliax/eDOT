@@ -14,7 +14,7 @@ async function main() {
     );
   }
 
-  // ethers is avaialble in the global scope
+  // ethers is available in the global scope
   const [deployer] = await ethers.getSigners();
   console.log(
     "Deploying the contracts with the account:",
@@ -120,9 +120,32 @@ async function main() {
   // Allocate 10% of total supply to the initial farms
   const ownerBalance = await uFragments.balanceOf(owner);
   const INITIAL_REWARDS = ownerBalance.div(10);
-  console.log("Balance, INITIAL_REWARDS:", ownerBalance.toString(), INITIAL_REWARDS.toString());
+  console.log(
+    "Balance, INITIAL_REWARDS:",
+    ownerBalance.toString(),
+    INITIAL_REWARDS.toString(),
+  );
   await uFragments.approve(farmController.address, INITIAL_REWARDS);
   await farmController.notifyRewards(INITIAL_REWARDS);
+
+  //stake some tokens
+  await token1.getFreeTokens(owner, ethers.utils.parseUnits("1", 18));
+  await token2.getFreeTokens(owner, ethers.utils.parseUnits("2", 18));
+  await token3.getFreeTokens(owner, ethers.utils.parseUnits("3", 18));
+  await token4.getFreeTokens(owner, ethers.utils.parseUnits("4", 18));
+  await token5.getFreeTokens(owner, ethers.utils.parseUnits("5", 18));
+  const farm1Address = await farmController.farms(0);
+  // const farm2Address = await farmController.farms(1);
+  // const farm3Address = await farmController.farms(2);
+  // const farm4Address = await farmController.farms(3);
+  // const farm5Address = await farmController.farms(4);
+
+  const LPFarmArtifact = artifacts.readArtifactSync("LPFarm");
+
+  const farm1 = new ethers.Contract(farm1Address, LPFarmArtifact.abi, deployer);
+  await token1.approve(farm1Address, ethers.utils.parseUnits("1", 18));
+  await farm1.stake(ethers.utils.parseUnits("1", 18));
+  console.log("DONE");
 
   // We also save the contract artifacts and addresses in the frontend directory
   saveFrontendFiles(

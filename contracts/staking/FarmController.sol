@@ -16,7 +16,7 @@ contract FarmController is OwnableUpgradeable {
   using SafeERC20 for IERC20;
 
   IRewardDistributionRecipientTokenOnly[] public farms;
-
+  
   mapping(address => address) public lpFarm;
 
   mapping(address => uint256) public rate;
@@ -95,5 +95,13 @@ contract FarmController is OwnableUpgradeable {
       IRewardDistributionRecipientTokenOnly farm = farms[i];
       farm.notifyRewardAmount(amount.mul(rate[address(farm)]).div(weightSum));
     }
+  }
+
+  function getFarmsCount() 
+  external 
+  view 
+  returns (uint256) 
+  {
+    return farms.length;
   }
 }

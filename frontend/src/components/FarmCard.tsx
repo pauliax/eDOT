@@ -1,11 +1,6 @@
-type Props = {
-  avatarUrl?: string;
-  lpPair?: string;
-  APY?: number;
-  rewards?: string;
-};
+import { Farm } from "./Farming";
 
-export function FarmCard({ avatarUrl, lpPair, APY, rewards }: Props) {
+export function FarmCard({ avatarUrl, lpPair, APY, rewards, rate }: Farm) {
   return (
     <section className="nes-container is-dark d-flex align-items-center">
       {/* <img
@@ -22,7 +17,12 @@ export function FarmCard({ avatarUrl, lpPair, APY, rewards }: Props) {
         /> */}
       <i className={avatarUrl}></i>
       <div className="farm-text">
-        <h4 className="name">{lpPair}</h4>
+        <h4 className="name">
+          {lpPair}{" "}
+          <span className="nes-badge w-auto">
+            <span className="is-warning w-auto">{rate}x</span>
+          </span>
+        </h4>
         <div className="nes-badge is-splited">
           <span className="is-primary">APY</span>
           <span className="is-success">{APY}%</span>

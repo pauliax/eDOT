@@ -5,6 +5,7 @@ import { BigNumber, ethers } from "ethers";
 // using them with ethers
 import TokenArtifact from "../contracts/Token.json";
 import OrchestratorArtifact from "../contracts/Orchestrator.json";
+import FarmControllerArtifact from "../contracts/FarmControllerArtifact.json";
 import contractAddress from "../contracts/contract-address.json";
 
 import {
@@ -85,6 +86,8 @@ export class Dapp extends React.Component<{}, DappState> {
 
   private _orchestrator?: ethers.Contract;
 
+  private _farmController?: ethers.Contract;
+
   private _pollDataInterval?: number;
 
   private initialState: DappState = {
@@ -141,6 +144,8 @@ export class Dapp extends React.Component<{}, DappState> {
 
     const transferFunc = (to: string, amount: string) =>
       this._transferTokens(to, amount);
+
+    const contractFarmController = this._farmController;
 
     const contractOrchestrator = this._orchestrator;
 
@@ -246,6 +251,7 @@ export class Dapp extends React.Component<{}, DappState> {
               <ContractsContext.Provider
                 value={{
                   contractOrchestrator,
+                  contractFarmController,
                 }}
               >
                 <TabbedNav />
@@ -272,7 +278,15 @@ export class Dapp extends React.Component<{}, DappState> {
               <p className="nes-text is-error title">Attention!</p>
               <span>
                 This DApp is still under construction. Use it at your own risk.
-                If in doubt, consult with your lawyer.
+                When in doubt, consult with{" "}
+                <a
+                  href="https://twitter.com/cz_binance"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  SZ
+                </a>
+                .
               </span>
             </section>
           </div>
@@ -364,6 +378,12 @@ export class Dapp extends React.Component<{}, DappState> {
     this._orchestrator = new ethers.Contract(
       contractAddress.Orchestrator,
       OrchestratorArtifact.abi,
+      this._provider.getSigner(0),
+    );
+
+    this._farmController = new ethers.Contract(
+      contractAddress.FarmController,
+      FarmControllerArtifact.abi,
       this._provider.getSigner(0),
     );
   }
