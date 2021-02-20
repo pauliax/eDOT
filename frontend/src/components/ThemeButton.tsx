@@ -39,7 +39,7 @@ export function ThemeButton() {
       title="Toggle dark/light theme"
       onClick={toggleTheme}
     >
-      {isDarkTheme ? <span>☀️</span> : <span>🌘</span>}
+      {isDarkTheme ? <span>🌘</span> : <span>☀️</span>}
     </button>
   );
 }

@@ -254,7 +254,14 @@ export class Dapp extends React.Component<{}, DappState> {
                   contractFarmController,
                 }}
               >
-                <TabbedNav />
+                <ThemeContext.Provider
+                  value={{
+                    isDarkTheme,
+                    setIsDarkTheme,
+                  }}
+                >
+                  <TabbedNav />
+                </ThemeContext.Provider>
               </ContractsContext.Provider>
             </Web3Context.Provider>
           </div>

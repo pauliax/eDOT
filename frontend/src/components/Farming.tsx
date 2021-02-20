@@ -14,6 +14,14 @@ export type Farm = {
   APY?: number;
   rewards?: string;
   rate?: string;
+  totalSupply?: string;
+};
+
+export type FarmDetails = {
+  lpPair?: string;
+  lpBalance?: string;
+  stakedAmount?: string;
+  reward?: number;
 };
 
 export function Farming() {
@@ -83,15 +91,26 @@ export function Farming() {
 
       //const name = await erc20Token.name();
       const symbol = await erc20Token.symbol();
-      //const decimals = await erc20Token.decimals();
+      const decimals = await erc20Token.decimals();
       //console.log(name, symbol, decimals);
+
+      const totalSupply = await lpFarm.totalSupply();
+      const totalSupplyFormatted = ethers.utils.formatUnits(
+        totalSupply,
+        decimals,
+      );
+      const totalStaked = getThousands(
+        Math.round(Number(totalSupplyFormatted)),
+      );
+      //console.log("ts: ", totalSupplyFormatted);
 
       const f: Farm = {
         avatarUrl: avatar,
         lpPair: symbol,
-        APY: (i + 1) * 10,
+        APY: (i + 1) * 100,
         rewards: rewards,
         rate: rate.toString(),
+        totalSupply: totalStaked,
       };
 
       array.push(f);
@@ -112,6 +131,7 @@ export function Farming() {
       APY={farm.APY}
       rewards={farm.rewards}
       rate={farm.rate}
+      totalSupply={farm.totalSupply}
     />
   ));
 
