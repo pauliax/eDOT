@@ -13,9 +13,9 @@ const config: HardhatUserConfig = {
   // defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 1337,
     },
-  }
+  },
 };
 
 export default config;

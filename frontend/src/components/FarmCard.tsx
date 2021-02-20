@@ -9,6 +9,8 @@ export function FarmCard({
   rewards,
   rate,
   totalSupply,
+  tokensContract,
+  lpFarmContract,
 }: Farm) {
   const [showModal, setShowModal] = useState(false);
 
@@ -60,6 +62,8 @@ export function FarmCard({
         lpPair={lpPair}
         showModal={showModal}
         setShowModal={setShowModal}
+        tokensContract={tokensContract}
+        lpFarmContract={lpFarmContract}
       />
     </div>
   );

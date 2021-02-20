@@ -1,10 +1,12 @@
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { FarmCard } from "./FarmCard";
 import { ContractsContext } from "../contexts/Context";
 import { useContext, useState, useEffect, useCallback } from "react";
 
 import LPFarmArtifact from "../contracts/LPFarm.json";
 import MockERC20Artifact from "../contracts/MockERC20Artifact.json";
+
+import { getThousands } from "../utils/NumberUtils";
 
 import "../styles/farming.scss";
 
@@ -15,6 +17,8 @@ export type Farm = {
   rewards?: string;
   rate?: string;
   totalSupply?: string;
+  tokensContract?: Contract;
+  lpFarmContract?: Contract;
 };
 
 export type FarmDetails = {
@@ -27,12 +31,6 @@ export type FarmDetails = {
 export function Farming() {
   const [farms, setFarms] = useState<Farm[]>([]);
   const { contractFarmController } = useContext(ContractsContext);
-
-  const getThousands = (number: number): string => {
-    const thousand = 1000;
-    if (number < thousand) return number.toString();
-    return (number / thousand).toString() + "k";
-  };
 
   const load = useCallback(async () => {
     if (!contractFarmController) return;
@@ -111,6 +109,8 @@ export function Farming() {
         rewards: rewards,
         rate: rate.toString(),
         totalSupply: totalStaked,
+        tokensContract: erc20Token,
+        lpFarmContract: lpFarm,
       };
 
       array.push(f);
@@ -132,6 +132,8 @@ export function Farming() {
       rewards={farm.rewards}
       rate={farm.rate}
       totalSupply={farm.totalSupply}
+      tokensContract={farm.tokensContract}
+      lpFarmContract={farm.lpFarmContract}
     />
   ));
 

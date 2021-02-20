@@ -1,19 +1,66 @@
-import { useContext, useState } from "react";
-import { ThemeContext } from "../contexts/Context";
+import { Contract, ethers } from "ethers";
+import { useContext, useState, useEffect, useCallback } from "react";
+import { ThemeContext, Web3Context } from "../contexts/Context";
+import { getThousands } from "../utils/NumberUtils";
 
 type Props = {
   lpPair?: string;
   showModal?: boolean;
   setShowModal?: (value: boolean) => void;
+  tokensContract?: Contract;
+  lpFarmContract?: Contract;
 };
 
 type FarmData = {
   enteredAmount?: number | string;
 };
 
-export function FarmDialog({ lpPair, showModal, setShowModal }: Props) {
+export function FarmDialog({
+  lpPair,
+  showModal,
+  setShowModal,
+  tokensContract,
+  lpFarmContract,
+}: Props) {
   const { isDarkTheme } = useContext(ThemeContext);
+  const { selectedAddress } = useContext(Web3Context);
   const [farmData, setFarmData] = useState<FarmData>({ enteredAmount: "" });
+  const [balance, setBalance] = useState("?");
+  const [staked, setStaked] = useState("?");
+  const [earned, setEarned] = useState("?");
+  const freeTokens = "5000";
+  const UINT_MAX =
+    "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+
+  const loadBalance = useCallback(async () => {
+    if (!selectedAddress || !tokensContract) return;
+    const lpBalance = await tokensContract.balanceOf(selectedAddress);
+    if (!lpBalance) setBalance("?");
+    const num = Number(lpBalance.toString());
+    setBalance(getThousands(num));
+  }, [selectedAddress, tokensContract]);
+
+  const loadStaked = useCallback(async () => {
+    if (!selectedAddress || !lpFarmContract) return;
+    const stakedBalance = await lpFarmContract.balanceOf(selectedAddress);
+    if (!stakedBalance) setStaked("?");
+    const num = Number(stakedBalance.toString());
+    setStaked(getThousands(num));
+  }, [selectedAddress, lpFarmContract]);
+
+  const loadEarned = useCallback(async () => {
+    if (!selectedAddress || !lpFarmContract) return;
+    const earnedBalance = await lpFarmContract.earned(selectedAddress);
+    if (!earnedBalance) setEarned("?");
+    const num = Number(earnedBalance.toString());
+    setEarned(getThousands(num));
+  }, [selectedAddress, lpFarmContract]);
+
+  useEffect(() => {
+    loadBalance();
+    loadStaked();
+    loadEarned();
+  }, [loadBalance, loadStaked, loadEarned]);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -30,9 +77,34 @@ export function FarmDialog({ lpPair, showModal, setShowModal }: Props) {
     console.log("max");
   };
 
-  const onDepositClick = (e: any) => {
+  const onDepositClick = async (e: any) => {
     e.preventDefault();
-    console.log("stake");
+    if (
+      lpFarmContract &&
+      farmData?.enteredAmount &&
+      tokensContract &&
+      selectedAddress
+    ) {
+      const decimals = await tokensContract.decimals();
+      const depositAmount = ethers.utils.parseUnits(
+        farmData.enteredAmount.toString(),
+        decimals,
+      );
+      const allowance = await tokensContract.allowance(
+        selectedAddress,
+        lpFarmContract.address,
+      );
+      console.log("allowance", allowance.toString());
+      if (depositAmount > allowance) {
+        const allowed = await tokensContract.approve(
+          lpFarmContract.address,
+          UINT_MAX,
+        );
+        console.log(allowed);
+      }
+      await lpFarmContract.stake(depositAmount);
+    }
+    console.log("stake", lpFarmContract, farmData?.enteredAmount);
   };
 
   const onClaimClick = (e: any) => {
@@ -50,8 +122,15 @@ export function FarmDialog({ lpPair, showModal, setShowModal }: Props) {
     console.log("exit");
   };
 
-  const onFaucetClick = (e: any) => {
+  const onFaucetClick = async (e: any) => {
     e.preventDefault();
+    if (tokensContract && selectedAddress) {
+      const freeTokensWithDecimals = ethers.utils.parseUnits(freeTokens, 18); //TODO: load decimals from parent
+      await tokensContract.getFreeTokens(
+        selectedAddress,
+        freeTokensWithDecimals,
+      );
+    }
     console.log("faucet");
   };
 
@@ -78,19 +157,19 @@ export function FarmDialog({ lpPair, showModal, setShowModal }: Props) {
           <div className="row justify-content-between">
             <strong>LP Balance </strong>=
             <p>
-              <u>200</u>
+              <u>{balance}</u>
             </p>
           </div>
           <div className="row justify-content-between">
             <strong>Staked Amount </strong>=
             <p>
-              <u>50</u>
+              <u>{staked}</u>
             </p>
           </div>
           <div className="row justify-content-between">
             <strong>Earned Reward </strong>=
             <p>
-              <u>0</u>
+              <u>{earned}</u>
             </p>
           </div>
         </div>
