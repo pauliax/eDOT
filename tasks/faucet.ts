@@ -37,7 +37,11 @@ task("faucet", "Sends ETH and tokens to an address")
     );
     const [sender] = await hre.ethers.getSigners();
 
-    const tx = await token.transfer(receiver, 100);
+    const decimals = await token.decimals();
+
+    const amount = hre.ethers.utils.parseUnits("100", decimals).toString();
+
+    const tx = await token.transfer(receiver, amount);
     await tx.wait();
 
     const tx2 = await sender.sendTransaction({

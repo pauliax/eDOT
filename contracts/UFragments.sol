@@ -400,4 +400,13 @@ contract UFragments is ERC20Upgradeable, OwnableUpgradeable {
     _allowedFragments[owner][spender] = value;
     emit Approval(owner, spender, value);
   }
+
+  function decimals() 
+  public
+  pure
+  override
+  returns (uint8) 
+  {
+    return uint8(DECIMALS);
+  }
 }

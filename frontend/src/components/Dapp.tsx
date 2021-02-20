@@ -23,7 +23,6 @@ import { Loading } from "./Loading";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { TabbedNav } from "./TabbedNav";
-import { NoTokensMessage } from "./NoTokensMessage";
 import { Footer } from "./Footer";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { TopNav } from "./TopNav";
@@ -57,6 +56,7 @@ declare global {
 type TokenData = {
   name?: string;
   symbol?: string;
+  decimals?: string;
 };
 
 type ErrorType = {
@@ -140,7 +140,7 @@ export class Dapp extends React.Component<{}, DappState> {
 
     const { balance, selectedAddress, tokenData, isDarkTheme } = this.state;
 
-    const { symbol } = tokenData;
+    const { symbol, decimals } = tokenData;
 
     const transferFunc = (to: string, amount: string) =>
       this._transferTokens(to, amount);
@@ -175,9 +175,7 @@ export class Dapp extends React.Component<{}, DappState> {
             >
               <i className="nes-octocat animate"></i>
               <h1>
-                <span className="text-center text-danger ml-2">
-                  {this.state.tokenData.symbol}
-                </span>{" "}
+                <span className="text-center text-danger ml-2">{symbol}</span>{" "}
                 TOKEN
               </h1>
             </a>
@@ -198,9 +196,13 @@ export class Dapp extends React.Component<{}, DappState> {
                 <CopyToClipboard copyText={this.state.selectedAddress} />
               </p>
               <p>
-                You have {this.state.balance.toString()}{" "}
-                {this.state.tokenData.symbol}
-                <i className="nes-icon coin"></i>
+                You have{" "}
+                {ethers.utils.formatUnits(
+                  this.state.balance.toString(),
+                  decimals,
+                )}{" "}
+                {symbol}
+                <i className="nes-icon coin mb-2"></i>
               </p>
             </section>
           </div>
@@ -232,19 +234,6 @@ export class Dapp extends React.Component<{}, DappState> {
 
         <div className="row">
           <div className="col-12">
-            {!balance && <p>balance</p>}
-            {balance?.eq(0) && (
-              <div
-                className={
-                  "row text-center nes-container is-rounded mb-4 " +
-                  (isDarkTheme ? "is-dark" : "")
-                }
-              >
-                <div className="col-12">
-                  <NoTokensMessage selectedAddress={selectedAddress} />
-                </div>
-              </div>
-            )}
             <Web3Context.Provider
               value={{ balance, selectedAddress, symbol, transferFunc }}
             >
@@ -422,10 +411,12 @@ export class Dapp extends React.Component<{}, DappState> {
     if (this._token) {
       const name = await this._token.name();
       const symbol = await this._token.symbol();
-      this.setState({ tokenData: { name, symbol } });
+      const decimals = "9"; //await this._token.decimals();
+      console.log(this._token);
+      this.setState({ tokenData: { name, symbol, decimals } });
     } else {
       this.setState({
-        tokenData: { name: undefined, symbol: undefined },
+        tokenData: { name: undefined, symbol: undefined, decimals: undefined },
       });
     }
   }

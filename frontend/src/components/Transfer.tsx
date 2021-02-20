@@ -1,14 +1,15 @@
+import { ethers } from "ethers";
 import { useState, useContext } from "react";
 import { Web3Context } from "../contexts/Context";
 
 import "../styles/transfer.scss";
 
 type Props = {
-  transferTokens: (to: string, amount: string) => void;
+  transferTokens: (to: string, amount: string) => Promise<void>;
 };
 
 type TransferData = {
-  amount?: number | string;
+  amount?: string;
   to?: string;
 };
 
@@ -21,13 +22,26 @@ export function Transfer({ transferTokens }: Props) {
   const { balance, symbol } = useContext(Web3Context);
 
   const onMaxClick = () => {
-    const amount = balance?.toString();
+    if (!balance) return;
+    const amount = ethers.utils.formatUnits(balance.toString(), 9); //load decimals
     setTransferData({ ...transferData, amount });
   };
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setTransferData({ ...transferData, [name]: value });
+  };
+
+  const transferEnteredTokens = async () => {
+    const { to, amount } = transferData;
+    if (!amount || amount === "0") {
+      alert("Amount is invalid!");
+    } else if (!to) {
+      alert("Address is invalid!");
+    } else {
+      const amountParsed = ethers.utils.parseUnits(amount, 9).toString(); // load edot decimals
+      await transferTokens(to, amountParsed);
+    }
   };
 
   return (
@@ -43,16 +57,7 @@ export function Transfer({ transferTokens }: Props) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-
-          const { to, amount } = transferData;
-
-          if (!amount || amount === "0") {
-            alert("Amount is invalid!");
-          } else if (!to) {
-            alert("Address is invalid!");
-          } else {
-            transferTokens(to, amount.toString());
-          }
+          transferEnteredTokens();
         }}
       >
         <div className="form-group nes-field">
