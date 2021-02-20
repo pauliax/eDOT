@@ -19,6 +19,7 @@ export type Farm = {
   totalSupply?: string;
   tokensContract?: Contract;
   lpFarmContract?: Contract;
+  decimals?: number;
 };
 
 export type FarmDetails = {
@@ -111,6 +112,7 @@ export function Farming() {
         totalSupply: totalStaked,
         tokensContract: erc20Token,
         lpFarmContract: lpFarm,
+        decimals: decimals,
       };
 
       array.push(f);
@@ -134,6 +136,7 @@ export function Farming() {
       totalSupply={farm.totalSupply}
       tokensContract={farm.tokensContract}
       lpFarmContract={farm.lpFarmContract}
+      decimals={farm.decimals}
     />
   ));
 

@@ -11,11 +11,11 @@ import "./tasks/faucet";
 const config: HardhatUserConfig = {
   solidity: "0.7.6",
   // defaultNetwork: "hardhat",
-  networks: {
-    hardhat: {
-      chainId: 1337,
-    },
-  },
+  // networks: {
+  //   localhost: {
+  //     chainId: 1337,
+  //   },
+  // },
 };
 
 export default config;

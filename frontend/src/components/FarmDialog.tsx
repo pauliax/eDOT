@@ -9,6 +9,7 @@ type Props = {
   setShowModal?: (value: boolean) => void;
   tokensContract?: Contract;
   lpFarmContract?: Contract;
+  decimals?: number;
 };
 
 type FarmData = {
@@ -21,40 +22,53 @@ export function FarmDialog({
   setShowModal,
   tokensContract,
   lpFarmContract,
+  decimals,
 }: Props) {
   const { isDarkTheme } = useContext(ThemeContext);
   const { selectedAddress } = useContext(Web3Context);
   const [farmData, setFarmData] = useState<FarmData>({ enteredAmount: "" });
-  const [balance, setBalance] = useState("?");
-  const [staked, setStaked] = useState("?");
-  const [earned, setEarned] = useState("?");
+  const [balance, setBalance] = useState(0);
+  const [staked, setStaked] = useState(0);
+  const [earned, setEarned] = useState(0);
   const freeTokens = "5000";
   const UINT_MAX =
     "115792089237316195423570985008687907853269984665640564039457584007913129639935";
 
   const loadBalance = useCallback(async () => {
-    if (!selectedAddress || !tokensContract) return;
+    if (!selectedAddress || !tokensContract || !decimals) return;
     const lpBalance = await tokensContract.balanceOf(selectedAddress);
-    if (!lpBalance) setBalance("?");
-    const num = Number(lpBalance.toString());
-    setBalance(getThousands(num));
-  }, [selectedAddress, tokensContract]);
+    if (!lpBalance) {
+      setBalance(0);
+      return;
+    }
+    var stringVal = ethers.utils.formatUnits(lpBalance, decimals);
+    const num = Number(stringVal);
+    setBalance(num);
+  }, [selectedAddress, tokensContract, decimals]);
 
   const loadStaked = useCallback(async () => {
-    if (!selectedAddress || !lpFarmContract) return;
+    if (!selectedAddress || !lpFarmContract || !decimals) return;
     const stakedBalance = await lpFarmContract.balanceOf(selectedAddress);
-    if (!stakedBalance) setStaked("?");
-    const num = Number(stakedBalance.toString());
-    setStaked(getThousands(num));
-  }, [selectedAddress, lpFarmContract]);
+    if (!stakedBalance) {
+      setStaked(0);
+      return;
+    }
+    var stringVal = ethers.utils.formatUnits(stakedBalance, decimals);
+    const num = Number(stringVal);
+    setStaked(num);
+  }, [selectedAddress, lpFarmContract, decimals]);
 
   const loadEarned = useCallback(async () => {
-    if (!selectedAddress || !lpFarmContract) return;
+    if (!selectedAddress || !lpFarmContract || !decimals) return;
     const earnedBalance = await lpFarmContract.earned(selectedAddress);
-    if (!earnedBalance) setEarned("?");
-    const num = Number(earnedBalance.toString());
-    setEarned(getThousands(num));
-  }, [selectedAddress, lpFarmContract]);
+    if (!earnedBalance) {
+      setEarned(0);
+      return;
+    }
+    var stringVal = ethers.utils.formatUnits(earnedBalance, decimals);
+    const num = Number(stringVal);
+    setEarned(num);
+  }, [selectedAddress, lpFarmContract, decimals]);
 
   useEffect(() => {
     loadBalance();
@@ -72,7 +86,7 @@ export function FarmDialog({
   };
 
   const onMaxClick = () => {
-    const enteredAmount = 100; //balance?.toString();
+    const enteredAmount = balance;
     setFarmData({ ...farmData, enteredAmount });
     console.log("max");
   };
@@ -124,13 +138,12 @@ export function FarmDialog({
 
   const onFaucetClick = async (e: any) => {
     e.preventDefault();
-    if (tokensContract && selectedAddress) {
-      const freeTokensWithDecimals = ethers.utils.parseUnits(freeTokens, 18); //TODO: load decimals from parent
-      await tokensContract.getFreeTokens(
-        selectedAddress,
-        freeTokensWithDecimals,
-      );
-    }
+    if (!tokensContract || !selectedAddress || !decimals) return;
+    const freeTokensWithDecimals = ethers.utils.parseUnits(
+      freeTokens,
+      decimals,
+    );
+    await tokensContract.getFreeTokens(selectedAddress, freeTokensWithDecimals);
     console.log("faucet");
   };
 
@@ -157,19 +170,19 @@ export function FarmDialog({
           <div className="row justify-content-between">
             <strong>LP Balance </strong>=
             <p>
-              <u>{balance}</u>
+              <u>{getThousands(balance)}</u>
             </p>
           </div>
           <div className="row justify-content-between">
             <strong>Staked Amount </strong>=
             <p>
-              <u>{staked}</u>
+              <u>{getThousands(staked)}</u>
             </p>
           </div>
           <div className="row justify-content-between">
             <strong>Earned Reward </strong>=
             <p>
-              <u>{earned}</u>
+              <u>{getThousands(earned)}</u>
             </p>
           </div>
         </div>

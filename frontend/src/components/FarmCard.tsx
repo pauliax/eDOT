@@ -11,6 +11,7 @@ export function FarmCard({
   totalSupply,
   tokensContract,
   lpFarmContract,
+  decimals,
 }: Farm) {
   const [showModal, setShowModal] = useState(false);
 
@@ -64,6 +65,7 @@ export function FarmCard({
         setShowModal={setShowModal}
         tokensContract={tokensContract}
         lpFarmContract={lpFarmContract}
+        decimals={decimals}
       />
     </div>
   );
