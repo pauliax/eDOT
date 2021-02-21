@@ -30,6 +30,7 @@ export function FarmDialog({
   const [balance, setBalance] = useState(0);
   const [staked, setStaked] = useState(0);
   const [earned, setEarned] = useState(0);
+  const [toggleUpdate, setToggleUpdate] = useState(false);
   const freeTokens = "5000";
   const UINT_MAX =
     "115792089237316195423570985008687907853269984665640564039457584007913129639935";
@@ -74,7 +75,7 @@ export function FarmDialog({
     loadBalance();
     loadStaked();
     loadEarned();
-  }, [loadBalance, loadStaked, loadEarned]);
+  }, [loadBalance, loadStaked, loadEarned, toggleUpdate]);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -118,7 +119,9 @@ export function FarmDialog({
           );
           console.log(allowed);
         }
-        await lpFarmContract.stake(depositAmount);
+        const tx = await lpFarmContract.stake(depositAmount);
+        await tx.wait();
+        setToggleUpdate(!toggleUpdate);
       } catch (e: any) {
         console.log("Error", e.message, e);
       } finally {
@@ -152,10 +155,12 @@ export function FarmDialog({
     );
     try {
       if (setIsProcessing) setIsProcessing(true);
-      await tokensContract.getFreeTokens(
+      const tx = await tokensContract.getFreeTokens(
         selectedAddress,
         freeTokensWithDecimals,
       );
+      await tx.wait();
+      setToggleUpdate(!toggleUpdate);
     } catch (e: any) {
       console.log("Error", e.message, e);
     } finally {
