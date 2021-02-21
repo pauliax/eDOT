@@ -60,16 +60,16 @@ export function FarmDialog({
   }, [selectedAddress, lpFarmContract, decimals]);
 
   const loadEarned = useCallback(async () => {
-    if (!selectedAddress || !lpFarmContract || !decimals) return;
+    if (!selectedAddress || !lpFarmContract) return;
     const earnedBalance = await lpFarmContract.earned(selectedAddress);
     if (!earnedBalance) {
       setEarned(0);
       return;
     }
-    var stringVal = ethers.utils.formatUnits(earnedBalance, decimals);
+    var stringVal = ethers.utils.formatUnits(earnedBalance, 9);
     const num = Number(stringVal);
     setEarned(num);
-  }, [selectedAddress, lpFarmContract, decimals]);
+  }, [selectedAddress, lpFarmContract]);
 
   useEffect(() => {
     loadBalance();
