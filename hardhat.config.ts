@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 import { HardhatUserConfig } from "hardhat/types";
 import "@nomiclabs/hardhat-waffle";
 import "hardhat-typechain";
@@ -12,14 +12,15 @@ import "./tasks/faucet";
 const MNEMONIC = process.env.MNEMONIC;
 const INFURA_KEY = process.env.INFURA_KEY;
 
-const needsInfura = process.env.npm_config_argv &&
-  (process.env.npm_config_argv.includes('rinkeby') ||
-    process.env.npm_config_argv.includes('ropsten') ||
-    process.env.npm_config_argv.includes('live') ||
-    process.env.npm_config_argv.includes('bsctest'));
+const needsInfura =
+  process.env.npm_config_argv &&
+  (process.env.npm_config_argv.includes("rinkeby") ||
+    process.env.npm_config_argv.includes("ropsten") ||
+    process.env.npm_config_argv.includes("live") ||
+    process.env.npm_config_argv.includes("bsctest"));
 
 if ((!MNEMONIC || !INFURA_KEY) && needsInfura) {
-  console.error('Please set a mnemonic and infura key.');
+  console.error("Please set a mnemonic and infura key.");
   process.exit(0);
 }
 
@@ -29,9 +30,9 @@ const config: HardhatUserConfig = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200
-      }
-    }
+        runs: 200,
+      },
+    },
   },
   // defaultNetwork: "hardhat",
   // networks: {
@@ -41,15 +42,15 @@ const config: HardhatUserConfig = {
   // },
   networks: {
     bsctest: {
-      url: 'https://data-seed-prebsc-1-s3.binance.org:8545/',
+      url: "https://data-seed-prebsc-1-s3.binance.org:8545/",
       chainId: 97,
       accounts: {
         mnemonic: MNEMONIC,
       },
       blockGasLimit: 30000000,
-      gas: 30000000
-    }
-  }
+      gas: 30000000,
+    },
+  },
 };
 
 export default config;

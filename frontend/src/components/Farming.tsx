@@ -148,8 +148,8 @@ export function Farming() {
         <span className="nes-text is-error">#</span> Farming
       </h4>
       <p className="text-center my-4">
-        Farm yields for APY. Choose LP token pairs you have and wish to farm and
-        start earning weekly rewards. <a href="#top">Read more here</a>.
+        Participate in the liquidity mining program. Deposit your LP tokens to
+        farm eDOT token rewards. <a href="#top">Read more here</a>.
       </p>
       <div className="farm-container">{farmsList}</div>
     </div>
