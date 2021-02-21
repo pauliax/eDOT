@@ -14,7 +14,7 @@ In short: eDOT is an elastic supply token pegged to the price of Polkadot (DOT) 
 
 * Video presentation:
 
-[![Video presentation](http://img.youtube.com/)](https://youtu.be/)
+[![Video presentation](http://img.youtube.com/vi/iwdI8Rc7fuY/default.jpg)](https://youtu.be/iwdI8Rc7fuY)
 
 ---
 
