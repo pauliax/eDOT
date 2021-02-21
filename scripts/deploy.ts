@@ -129,22 +129,39 @@ async function main() {
   await farmController.notifyRewards(INITIAL_REWARDS);
 
   //stake some tokens
-  await token1.getFreeTokens(owner, ethers.utils.parseUnits("1", 18));
-  await token2.getFreeTokens(owner, ethers.utils.parseUnits("2", 18));
-  await token3.getFreeTokens(owner, ethers.utils.parseUnits("3", 18));
-  await token4.getFreeTokens(owner, ethers.utils.parseUnits("4", 18));
-  await token5.getFreeTokens(owner, ethers.utils.parseUnits("5", 18));
+  await token1.getFreeTokens(owner, ethers.utils.parseUnits("100", 18));
+  await token2.getFreeTokens(owner, ethers.utils.parseUnits("200", 18));
+  await token3.getFreeTokens(owner, ethers.utils.parseUnits("350", 18));
+  await token4.getFreeTokens(owner, ethers.utils.parseUnits("500", 18));
+  await token5.getFreeTokens(owner, ethers.utils.parseUnits("600", 18));
   const farm1Address = await farmController.farms(0);
-  // const farm2Address = await farmController.farms(1);
-  // const farm3Address = await farmController.farms(2);
-  // const farm4Address = await farmController.farms(3);
-  // const farm5Address = await farmController.farms(4);
+  const farm2Address = await farmController.farms(1);
+  const farm3Address = await farmController.farms(2);
+  const farm4Address = await farmController.farms(3);
+  const farm5Address = await farmController.farms(4);
 
   const LPFarmArtifact = artifacts.readArtifactSync("LPFarm");
 
   const farm1 = new ethers.Contract(farm1Address, LPFarmArtifact.abi, deployer);
-  await token1.approve(farm1Address, ethers.utils.parseUnits("1", 18));
-  await farm1.stake(ethers.utils.parseUnits("1", 18));
+  await token1.approve(farm1Address, ethers.utils.parseUnits("100", 18));
+  await farm1.stake(ethers.utils.parseUnits("100", 18));
+
+  const farm2 = new ethers.Contract(farm2Address, LPFarmArtifact.abi, deployer);
+  await token2.approve(farm2Address, ethers.utils.parseUnits("200", 18));
+  await farm2.stake(ethers.utils.parseUnits("200", 18));
+
+  const farm3 = new ethers.Contract(farm3Address, LPFarmArtifact.abi, deployer);
+  await token3.approve(farm3Address, ethers.utils.parseUnits("350", 18));
+  await farm3.stake(ethers.utils.parseUnits("350", 18));
+
+  const farm4 = new ethers.Contract(farm4Address, LPFarmArtifact.abi, deployer);
+  await token4.approve(farm4Address, ethers.utils.parseUnits("500", 18));
+  await farm4.stake(ethers.utils.parseUnits("500", 18));
+
+  const farm5 = new ethers.Contract(farm5Address, LPFarmArtifact.abi, deployer);
+  await token5.approve(farm5Address, ethers.utils.parseUnits("600", 18));
+  await farm5.stake(ethers.utils.parseUnits("600", 18));
+
   console.log("DONE");
 
   // We also save the contract artifacts and addresses in the frontend directory
