@@ -244,13 +244,13 @@ contract UFragmentsPolicy is OwnableUpgradeable {
     __Ownable_init();
     transferOwnership(owner_);
 
-    // deviationThreshold = 0.05e18 = 5e16
-    deviationThreshold = 5 * 10**(DECIMALS - 2);
+    // deviationThreshold = 0.04e18 = 4e16
+    deviationThreshold = 4 * 10**(DECIMALS - 2);
 
     rebaseLag = 30;
     minRebaseTimeIntervalSec = 1 days;
-    rebaseWindowOffsetSec = 72000; // 8PM UTC
-    rebaseWindowLengthSec = 15 minutes;
+    rebaseWindowOffsetSec = 64800; // 6PM UTC
+    rebaseWindowLengthSec = 45 minutes;
     lastRebaseTimestampSec = 0;
     epoch = 0;
 

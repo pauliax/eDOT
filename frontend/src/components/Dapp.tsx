@@ -4,6 +4,7 @@ import { BigNumber, ethers } from "ethers";
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import TokenArtifact from "../contracts/Token.json";
+import UFragmentsPolicyArtifact from "../contracts/UFragmentsPolicy.json";
 import OrchestratorArtifact from "../contracts/Orchestrator.json";
 import FarmControllerArtifact from "../contracts/FarmControllerArtifact.json";
 import contractAddress from "../contracts/contract-address.json";
@@ -86,6 +87,8 @@ export class Dapp extends React.Component<{}, DappState> {
 
   private _token?: ethers.Contract;
 
+  private _uFragmentsPolicy?: ethers.Contract;
+
   private _orchestrator?: ethers.Contract;
 
   private _farmController?: ethers.Contract;
@@ -157,6 +160,10 @@ export class Dapp extends React.Component<{}, DappState> {
     const contractFarmController = this._farmController;
 
     const contractOrchestrator = this._orchestrator;
+
+    const uFragmentsPolicy = this._uFragmentsPolicy;
+
+    const uFragments = this._token;
 
     const setIsDarkTheme = (isDark: boolean) => this._toggleTheme(isDark);
 
@@ -259,6 +266,8 @@ export class Dapp extends React.Component<{}, DappState> {
                 value={{
                   contractOrchestrator,
                   contractFarmController,
+                  uFragmentsPolicy,
+                  uFragments,
                 }}
               >
                 <ThemeContext.Provider
@@ -404,6 +413,12 @@ export class Dapp extends React.Component<{}, DappState> {
     this._farmController = new ethers.Contract(
       contractAddress.FarmController,
       FarmControllerArtifact.abi,
+      this._provider.getSigner(0),
+    );
+
+    this._uFragmentsPolicy = new ethers.Contract(
+      contractAddress.UFragmentsPolicy,
+      UFragmentsPolicyArtifact.abi,
       this._provider.getSigner(0),
     );
   }
