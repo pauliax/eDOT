@@ -8,6 +8,7 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "deploy-local": "npx hardhat --network localhost run scripts/deploy.ts",
+    "deploy-bsctest": "npx hardhat --network bsctest run scripts/deploy.ts",
     "localchain": "npx hardhat node",
     "test": "npx hardhat test",
     "format": "prettier --write **/*.ts{,x}",
@@ -17,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pauliax/Hardhat-boilerplate.git"
+    "url": "git+https://github.com/pauliax/eDOT.git"
   },
   "keywords": [
     "hardhat",
@@ -27,12 +28,13 @@
   "author": "Paul",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pauliax/Hardhat-boilerplate/issues"
+    "url": "https://github.com/pauliax/eDOT/issues"
   },
-  "homepage": "https://github.com/pauliax/Hardhat-boilerplate#readme",
+  "homepage": "https://github.com/pauliax/eDOT#readme",
   "dependencies": {
     "@openzeppelin/contracts": "^3.4.0",
-    "@openzeppelin/contracts-upgradeable": "^3.4.0"
+    "@openzeppelin/contracts-upgradeable": "^3.4.0",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.1",
