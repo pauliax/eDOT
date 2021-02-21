@@ -25,7 +25,7 @@ export function FarmDialog({
   decimals,
 }: Props) {
   const { isDarkTheme } = useContext(ThemeContext);
-  const { selectedAddress } = useContext(Web3Context);
+  const { selectedAddress, setIsProcessing } = useContext(Web3Context);
   const [farmData, setFarmData] = useState<FarmData>({ enteredAmount: "" });
   const [balance, setBalance] = useState(0);
   const [staked, setStaked] = useState(0);
@@ -99,24 +99,31 @@ export function FarmDialog({
       tokensContract &&
       selectedAddress
     ) {
-      const decimals = await tokensContract.decimals();
-      const depositAmount = ethers.utils.parseUnits(
-        farmData.enteredAmount.toString(),
-        decimals,
-      );
-      const allowance = await tokensContract.allowance(
-        selectedAddress,
-        lpFarmContract.address,
-      );
-      console.log("allowance", allowance.toString());
-      if (depositAmount > allowance) {
-        const allowed = await tokensContract.approve(
-          lpFarmContract.address,
-          UINT_MAX,
+      try {
+        if (setIsProcessing) setIsProcessing(true);
+        const decimals = await tokensContract.decimals();
+        const depositAmount = ethers.utils.parseUnits(
+          farmData.enteredAmount.toString(),
+          decimals,
         );
-        console.log(allowed);
+        const allowance = await tokensContract.allowance(
+          selectedAddress,
+          lpFarmContract.address,
+        );
+        console.log("allowance", allowance.toString());
+        if (depositAmount > allowance) {
+          const allowed = await tokensContract.approve(
+            lpFarmContract.address,
+            UINT_MAX,
+          );
+          console.log(allowed);
+        }
+        await lpFarmContract.stake(depositAmount);
+      } catch (e: any) {
+        console.log("Error", e.message, e);
+      } finally {
+        if (setIsProcessing) setIsProcessing(false);
       }
-      await lpFarmContract.stake(depositAmount);
     }
     console.log("stake", lpFarmContract, farmData?.enteredAmount);
   };
@@ -143,7 +150,17 @@ export function FarmDialog({
       freeTokens,
       decimals,
     );
-    await tokensContract.getFreeTokens(selectedAddress, freeTokensWithDecimals);
+    try {
+      if (setIsProcessing) setIsProcessing(true);
+      await tokensContract.getFreeTokens(
+        selectedAddress,
+        freeTokensWithDecimals,
+      );
+    } catch (e: any) {
+      console.log("Error", e.message, e);
+    } finally {
+      if (setIsProcessing) setIsProcessing(false);
+    }
     console.log("faucet");
   };
 

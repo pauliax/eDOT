@@ -6,6 +6,7 @@ type Web3ContextProps = {
   selectedAddress?: string;
   symbol?: string;
   transferFunc?: (to: string, amount: string) => Promise<void>;
+  setIsProcessing?: (isProcessing: boolean) => void;
 };
 
 export const Web3Context = createContext<Partial<Web3ContextProps>>({});

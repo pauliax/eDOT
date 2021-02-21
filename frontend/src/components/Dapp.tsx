@@ -27,6 +27,7 @@ import { Footer } from "./Footer";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { TopNav } from "./TopNav";
 import { FAQ } from "./FAQ";
+import { ProgressBar } from "./ProgressBar";
 
 // This is the Hardhat Network id, you might change it in the hardhat.config.js
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
@@ -77,6 +78,7 @@ type DappState = {
   transactionError?: ErrorType;
   networkError?: string;
   isDarkTheme?: boolean;
+  isProcessing?: boolean;
 };
 
 export class Dapp extends React.Component<{}, DappState> {
@@ -101,6 +103,7 @@ export class Dapp extends React.Component<{}, DappState> {
     transactionError: undefined,
     networkError: undefined,
     isDarkTheme: undefined,
+    isProcessing: undefined,
   };
 
   constructor(props: any) {
@@ -138,7 +141,13 @@ export class Dapp extends React.Component<{}, DappState> {
       return <Loading />;
     }
 
-    const { balance, selectedAddress, tokenData, isDarkTheme } = this.state;
+    const {
+      balance,
+      selectedAddress,
+      tokenData,
+      isDarkTheme,
+      isProcessing,
+    } = this.state;
 
     const { symbol, decimals } = tokenData;
 
@@ -150,6 +159,9 @@ export class Dapp extends React.Component<{}, DappState> {
     const contractOrchestrator = this._orchestrator;
 
     const setIsDarkTheme = (isDark: boolean) => this._toggleTheme(isDark);
+
+    const setIsProcessing = (isProcessing: boolean) =>
+      this._setIsProcessing(isProcessing);
 
     // If everything is loaded, we render the application.
     return (
@@ -235,7 +247,13 @@ export class Dapp extends React.Component<{}, DappState> {
         <div className="row">
           <div className="col-12">
             <Web3Context.Provider
-              value={{ balance, selectedAddress, symbol, transferFunc }}
+              value={{
+                balance,
+                selectedAddress,
+                symbol,
+                transferFunc,
+                setIsProcessing,
+              }}
             >
               <ContractsContext.Provider
                 value={{
@@ -291,6 +309,12 @@ export class Dapp extends React.Component<{}, DappState> {
         <div className="row text-center mt-5">
           <div className="col-12">
             <Footer footerText={tokenData?.name} />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-12">
+            <ProgressBar isProcessing={isProcessing} />
           </div>
         </div>
       </div>
@@ -532,5 +556,9 @@ export class Dapp extends React.Component<{}, DappState> {
 
   _toggleTheme(isDark: boolean) {
     this.setState({ isDarkTheme: isDark });
+  }
+
+  _setIsProcessing(isProcessing: boolean) {
+    this.setState({ isProcessing });
   }
 }

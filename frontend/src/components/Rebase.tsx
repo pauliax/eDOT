@@ -1,16 +1,14 @@
 import { useContext } from "react";
-import { ContractsContext } from "../contexts/Context";
+import { ContractsContext, Web3Context } from "../contexts/Context";
 
 export function Rebase() {
   const { contractOrchestrator } = useContext(ContractsContext);
-  //const { selectedAddress } = useContext(Web3Context);
+  const { setIsProcessing } = useContext(Web3Context);
 
   const onRebaseClick = async () => {
+    if (!contractOrchestrator) return;
     try {
-      console.log("rebase ", contractOrchestrator);
-
-      if (!contractOrchestrator) return;
-
+      if (setIsProcessing) setIsProcessing(true);
       const result = await contractOrchestrator.rebase();
 
       //.send({
@@ -18,7 +16,6 @@ export function Rebase() {
       //}, (err : any, txHash : any) => console.log(err, txHash));
 
       console.log("result: ", result);
-
       if (!result) return;
 
       if (result.status === true) {
@@ -27,9 +24,9 @@ export function Rebase() {
         console.log("rebase true");
       }
     } catch (e) {
-      console.log("error ", e);
+      console.log("Error", e.message, e);
     } finally {
-      console.log("done");
+      if (setIsProcessing) setIsProcessing(false);
     }
   };
 

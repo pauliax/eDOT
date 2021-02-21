@@ -19,7 +19,7 @@ export function Transfer({ transferTokens }: Props) {
     to: "",
   });
 
-  const { balance, symbol } = useContext(Web3Context);
+  const { balance, symbol, setIsProcessing } = useContext(Web3Context);
 
   const onMaxClick = () => {
     if (!balance) return;
@@ -39,8 +39,15 @@ export function Transfer({ transferTokens }: Props) {
     } else if (!to) {
       alert("Address is invalid!");
     } else {
-      const amountParsed = ethers.utils.parseUnits(amount, 9).toString(); // load edot decimals
-      await transferTokens(to, amountParsed);
+      try {
+        if (setIsProcessing) setIsProcessing(true);
+        const amountParsed = ethers.utils.parseUnits(amount, 9).toString(); // load edot decimals
+        await transferTokens(to, amountParsed);
+      } catch (e) {
+        console.log("Error", e.message, e);
+      } finally {
+        if (setIsProcessing) setIsProcessing(false);
+      }
     }
   };
 
