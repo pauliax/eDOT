@@ -86,8 +86,14 @@ export function FarmDialog({
     if (setShowModal) setShowModal(false);
   };
 
-  const onMaxClick = () => {
+  const onMaxDepositClick = () => {
     const enteredAmount = balance;
+    setFarmData({ ...farmData, enteredAmount });
+    console.log("max");
+  };
+
+  const onMaxWithdrawClick = () => {
+    const enteredAmount = staked;
     setFarmData({ ...farmData, enteredAmount });
     console.log("max");
   };
@@ -128,21 +134,75 @@ export function FarmDialog({
         if (setIsProcessing) setIsProcessing(false);
       }
     }
-    console.log("stake", lpFarmContract, farmData?.enteredAmount);
+    if (!farmData?.enteredAmount)
+      alert("Invalid amount entered!");
+    console.log("stake");
   };
 
-  const onClaimClick = (e: any) => {
+  const onClaimClick = async (e: any) => {
     e.preventDefault();
+    if (
+      lpFarmContract
+    ) {
+      try {
+        if (setIsProcessing) setIsProcessing(true);
+        const tx = await lpFarmContract.getReward();
+        await tx.wait();
+        setToggleUpdate(!toggleUpdate);
+      } catch (e: any) {
+        console.log("Error", e.message, e);
+      } finally {
+        if (setIsProcessing) setIsProcessing(false);
+      }
+    }
     console.log("claim");
   };
 
-  const onWithdrawClick = (e: any) => {
+  const onWithdrawClick = async (e: any) => {
     e.preventDefault();
+    if (
+      lpFarmContract &&
+      farmData?.enteredAmount &&
+      tokensContract &&
+      selectedAddress
+    ) {
+      try {
+        if (setIsProcessing) setIsProcessing(true);
+        const decimals = await tokensContract.decimals();
+        const withdrawAmount = ethers.utils.parseUnits(
+          farmData.enteredAmount.toString(),
+          decimals,
+        );
+        const tx = await lpFarmContract.withdraw(withdrawAmount);
+        await tx.wait();
+        setToggleUpdate(!toggleUpdate);
+      } catch (e: any) {
+        console.log("Error", e.message, e);
+      } finally {
+        if (setIsProcessing) setIsProcessing(false);
+      }
+    }
+    if (!farmData?.enteredAmount)
+      alert("Invalid amount entered!");
     console.log("withdraw");
   };
 
-  const onExitClick = (e: any) => {
+  const onExitClick = async (e: any) => {
     e.preventDefault();
+    if (
+      lpFarmContract
+    ) {
+      try {
+        if (setIsProcessing) setIsProcessing(true);
+        const tx = await lpFarmContract.exit();
+        await tx.wait();
+        setToggleUpdate(!toggleUpdate);
+      } catch (e: any) {
+        console.log("Error", e.message, e);
+      } finally {
+        if (setIsProcessing) setIsProcessing(false);
+      }
+    }
     console.log("exit");
   };
 
@@ -224,9 +284,17 @@ export function FarmDialog({
         <div className="text-right">
           <button
             type="button"
+            className="nes-btn btn-small is-primary"
+            onClick={() => onMaxDepositClick()}
+            title="Fill maximum deposit amount you have"
+          >
+            MAX
+          </button>
+          <button
+            type="button"
             className="nes-btn btn-small is-warning"
-            onClick={() => onMaxClick()}
-            title="Fill maximum amount you have"
+            onClick={() => onMaxWithdrawClick()}
+            title="Fill maximum withdraw amount you have"
           >
             MAX
           </button>
