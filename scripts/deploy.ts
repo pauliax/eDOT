@@ -129,38 +129,62 @@ async function main() {
   await farmController.notifyRewards(INITIAL_REWARDS);
 
   //stake some tokens
-  await token1.getFreeTokens(owner, ethers.utils.parseUnits("100", 18));
-  await token2.getFreeTokens(owner, ethers.utils.parseUnits("200", 18));
-  await token3.getFreeTokens(owner, ethers.utils.parseUnits("350", 18));
-  await token4.getFreeTokens(owner, ethers.utils.parseUnits("500", 18));
-  await token5.getFreeTokens(owner, ethers.utils.parseUnits("600", 18));
-  const farm1Address = await farmController.farms(0);
-  const farm2Address = await farmController.farms(1);
-  const farm3Address = await farmController.farms(2);
-  const farm4Address = await farmController.farms(3);
-  const farm5Address = await farmController.farms(4);
+  // const freeTokens1 = ethers.utils.parseUnits("100", 18);
+  // const freeTokens2 = ethers.utils.parseUnits("200", 18);
+  // const freeTokens3 = ethers.utils.parseUnits("350", 18);
+  // const freeTokens4 = ethers.utils.parseUnits("500", 18);
+  // const freeTokens5 = ethers.utils.parseUnits("600", 18);
 
-  const LPFarmArtifact = artifacts.readArtifactSync("LPFarm");
-
-  const farm1 = new ethers.Contract(farm1Address, LPFarmArtifact.abi, deployer);
-  await token1.approve(farm1Address, ethers.utils.parseUnits("100", 18));
-  await farm1.stake(ethers.utils.parseUnits("100", 18));
-
-  const farm2 = new ethers.Contract(farm2Address, LPFarmArtifact.abi, deployer);
-  await token2.approve(farm2Address, ethers.utils.parseUnits("200", 18));
-  await farm2.stake(ethers.utils.parseUnits("200", 18));
-
-  const farm3 = new ethers.Contract(farm3Address, LPFarmArtifact.abi, deployer);
-  await token3.approve(farm3Address, ethers.utils.parseUnits("350", 18));
-  await farm3.stake(ethers.utils.parseUnits("350", 18));
-
-  const farm4 = new ethers.Contract(farm4Address, LPFarmArtifact.abi, deployer);
-  await token4.approve(farm4Address, ethers.utils.parseUnits("500", 18));
-  await farm4.stake(ethers.utils.parseUnits("500", 18));
-
-  const farm5 = new ethers.Contract(farm5Address, LPFarmArtifact.abi, deployer);
-  await token5.approve(farm5Address, ethers.utils.parseUnits("600", 18));
-  await farm5.stake(ethers.utils.parseUnits("600", 18));
+  // await token1.getFreeTokens(owner, freeTokens1);
+  // await token2.getFreeTokens(owner, freeTokens2);
+  // await token3.getFreeTokens(owner, freeTokens3);
+  // await token4.getFreeTokens(owner, freeTokens4);
+  // await token5.getFreeTokens(owner, freeTokens5);
+  // console.log("getFreeTokens collected");
+  //
+  // const farm1Address = await farmController.getFarm(0);
+  // console.log("farm1Address", farm1Address);
+  // const farm2Address = await farmController.getFarm(1);
+  // console.log("farm2Address", farm2Address);
+  // const farm3Address = await farmController.getFarm(2);
+  // console.log("farm3Address", farm3Address);
+  // const farm4Address = await farmController.getFarm(3);
+  // console.log("farm4Address", farm4Address);
+  // const farm5Address = await farmController.getFarm(4);
+  // console.log("farm5Address", farm5Address);
+  //
+  // const LPFarmArtifact = artifacts.readArtifactSync("LPFarm");
+  //
+  // const farm1 = new ethers.Contract(farm1Address, LPFarmArtifact.abi, deployer);
+  // console.log("farm1 loaded");
+  // await token1.approve(farm1Address, freeTokens1);
+  // console.log("farm1 approved");
+  // await farm1.stake(freeTokens1);
+  // console.log("staked 100 tokens in farm1");
+  //
+  // const farm2 = new ethers.Contract(farm2Address, LPFarmArtifact.abi, deployer);
+  // console.log("farm2 loaded");
+  // await token2.approve(farm2Address, freeTokens2);
+  // await farm2.stake(freeTokens2);
+  // console.log("staked 200 tokens in farm2");
+  //
+  // const farm3 = new ethers.Contract(farm3Address, LPFarmArtifact.abi, deployer);
+  // console.log("farm3 loaded");
+  // await token3.approve(farm3Address, freeTokens3);
+  // await farm3.stake(freeTokens3);
+  // console.log("staked 350 tokens in farm3");
+  //
+  // const farm4 = new ethers.Contract(farm4Address, LPFarmArtifact.abi, deployer);
+  // console.log("farm4 loaded");
+  // await token4.approve(farm4Address, freeTokens4);
+  // await farm4.stake(freeTokens4);
+  // console.log("staked 500 tokens in farm4");
+  //
+  // const farm5 = new ethers.Contract(farm5Address, LPFarmArtifact.abi, deployer);
+  // console.log("farm5 loaded");
+  // await token5.approve(farm5Address, freeTokens5);
+  // await farm5.stake(freeTokens5);
+  // console.log("staked 600 tokens in farm5");
 
   console.log("DONE");
 

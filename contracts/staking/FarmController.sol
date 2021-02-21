@@ -104,4 +104,12 @@ contract FarmController is OwnableUpgradeable {
   {
     return farms.length;
   }
+
+  function getFarm(uint _index)
+  external
+  view
+  returns (IRewardDistributionRecipientTokenOnly)
+  {
+    return farms[_index];
+  }
 }

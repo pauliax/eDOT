@@ -24,7 +24,15 @@ if ((!MNEMONIC || !INFURA_KEY) && needsInfura) {
 }
 
 const config: HardhatUserConfig = {
-  solidity: "0.7.6",
+  solidity: {
+    version: "0.7.6",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
   // defaultNetwork: "hardhat",
   // networks: {
   //   localhost: {
@@ -33,11 +41,13 @@ const config: HardhatUserConfig = {
   // },
   networks: {
     bsctest: {
-      url: `https://data-seed-prebsc-1-s2.binance.org:8545/`,
-      chainId: 0x61,
+      url: 'https://data-seed-prebsc-1-s3.binance.org:8545/',
+      chainId: 97,
       accounts: {
         mnemonic: MNEMONIC,
       },
+      blockGasLimit: 30000000,
+      gas: 30000000
     }
   }
 };
