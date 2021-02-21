@@ -134,16 +134,13 @@ export function FarmDialog({
         if (setIsProcessing) setIsProcessing(false);
       }
     }
-    if (!farmData?.enteredAmount)
-      alert("Invalid amount entered!");
+    if (!farmData?.enteredAmount) alert("Invalid amount entered!");
     console.log("stake");
   };
 
   const onClaimClick = async (e: any) => {
     e.preventDefault();
-    if (
-      lpFarmContract
-    ) {
+    if (lpFarmContract) {
       try {
         if (setIsProcessing) setIsProcessing(true);
         const tx = await lpFarmContract.getReward();
@@ -182,16 +179,13 @@ export function FarmDialog({
         if (setIsProcessing) setIsProcessing(false);
       }
     }
-    if (!farmData?.enteredAmount)
-      alert("Invalid amount entered!");
+    if (!farmData?.enteredAmount) alert("Invalid amount entered!");
     console.log("withdraw");
   };
 
   const onExitClick = async (e: any) => {
     e.preventDefault();
-    if (
-      lpFarmContract
-    ) {
+    if (lpFarmContract) {
       try {
         if (setIsProcessing) setIsProcessing(true);
         const tx = await lpFarmContract.exit();

@@ -7,6 +7,7 @@ import { Transfer } from "./Transfer";
 import { Staking } from "./Staking";
 import { Farming } from "./Farming";
 import { Rebase } from "./Rebase";
+import { Governance } from "./Governance";
 
 import "../styles/tabs.scss";
 
@@ -28,6 +29,9 @@ export const TabbedNav = () => {
           </Tab>
           <Tab eventKey="rebase" title="⚖️ Rebase">
             <Rebase />
+          </Tab>
+          <Tab eventKey="governance" title="💼 Governance">
+            <Governance />
           </Tab>
         </Tabs>
       )}
