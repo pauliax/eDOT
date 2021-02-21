@@ -112,7 +112,8 @@ export function Rebase() {
         <span className="nes-text is-warning">#</span> Rebase
       </h4>
       <p className="text-center my-4">
-        Rebase. <a href="#top">Read more here</a>.
+        Rebase parameters and analytics. Track the state of eDOT and make the
+        best decisions. <a href="#top">Read more here</a>.
       </p>
       <div className="lists">
         <ul className="nes-list is-circle">
