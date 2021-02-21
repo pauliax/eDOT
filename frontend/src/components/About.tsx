@@ -25,7 +25,11 @@ export function About() {
         <form method="dialog">
           <p className="title text-center">About</p>
           <p className="text-center">
-            This is about text. Here we explain some details about this project.
+            In short: eDOT is an elastic supply token pegged to the price of
+            Polkadot (DOT) token using rebase (expansion and contraction)
+            mechanism. That means user always owns the same fraction (%) of the
+            eDOT supply despite the number of tokens (supply) periodically
+            changing in his/her account.
           </p>
           <menu className="dialog-menu">
             <button className="nes-btn">Close</button>

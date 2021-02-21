@@ -2,7 +2,9 @@
 
 ### The DApp is deployed on the BSC testnet.
 
-Elastic Polkadot token on BSC. 
+Elastic Polkadot token on the Binance Smart Chain (BSC). 
+
+In short: eDOT is an elastic supply token pegged to the price of Polkadot (DOT) token using rebase (expansion and contraction) mechanism. That means user always owns the same fraction (%) of the eDOT supply despite the number of tokens (supply) periodically changing in his/her account.
 
 ---
 

@@ -82,6 +82,11 @@ export function Farming() {
       const avatarsCount = avatars.length;
       const avatar = avatars[i % avatarsCount];
 
+      const APYs = [630, 590, 375, 180, 130];
+
+      const APYsCount = APYs.length;
+      const APY = APYs[i % APYsCount];
+
       const erc20Token = new ethers.Contract(
         stakeToken,
         MockERC20Artifact.abi,
@@ -106,7 +111,7 @@ export function Farming() {
       const f: Farm = {
         avatarUrl: avatar,
         lpPair: symbol,
-        APY: (i + 1) * 100,
+        APY: APY,
         rewards: rewards,
         rate: rate.toString(),
         totalSupply: totalStaked,
